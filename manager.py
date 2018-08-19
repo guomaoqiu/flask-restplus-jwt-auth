@@ -2,8 +2,8 @@
 # @Author: guomaoqiu
 # @File Name: manager.py
 # @Date:   2018-08-18 22:45:33
-# @Last Modified by:   Green
-# @Last Modified time: 2018-08-19 00:23:38
+# @Last Modified by:   guomaoqiu@sina.com
+# @Last Modified time: 2018-08-19 12:28:42
 
 import os
 from app import create_app, db

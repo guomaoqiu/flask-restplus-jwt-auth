@@ -2,13 +2,13 @@
 # @Author: guomaoqiu
 # @File Name: __init__.py
 # @Date:   2018-08-18 23:28:31
-# @Last Modified by:   Green
-# @Last Modified time: 2018-08-19 00:23:27
+# @Last Modified by:   guomaoqiu@sina.com
+# @Last Modified time: 2018-08-19 12:30:15
+
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 
 db = SQLAlchemy()
-
 
 def create_app(config_type='dev'):
     from config import config
