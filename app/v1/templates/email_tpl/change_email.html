@@ -1,0 +1,20 @@
+<p>Dear {{ user.username }} 特此谨致问候，</p>
+
+<p>我们收到了重置电子邮件地址的请求。请单击下面的链接，使用我们的安全服务器重置密码：</p>
+<p>To confirm your account please <a href="{{ url_for('auth.change_email', token=token, _external=True) }}">click here</a>.</p>
+</p>{{ confirm_url }}</p>
+
+<p>如果单击链接不起作用，您可以将链接复制并粘贴到 Web 浏览器的地址栏中。单击上面的链接后，您将能够为您的账户创建一个新密码。</p>
+
+<p>如果您未请求重置密码，则可以安全地忽略此电子邮件。</p>
+
+<p>请不要回复此邮件，任何问题请联系QQ 2399447849</p>
+
+<p>感谢您的使用。</p>
+
+<p>此致，</p>
+<p>      Admin: guomaoqiu</p>
+
+<p style="color:red">The Platform PowerBy Nginx/uWSGI/Flask/Supervisor/MySQL/Docker</p>
+
+<p>Thansk!!!</p>

@@ -1,0 +1,19 @@
+Dear {{ user.username }} 特此谨致问候，
+
+请点击以下链接进行邮箱确认验证，
+{{ confirm_url }}
+
+如果单击链接不起作用，您可以将链接复制并粘贴到 Web 浏览器的地址栏中。单击上面的链接后，您将激活账户。
+
+如果您未请求账号注册，则可以安全地忽略此电子邮件。
+
+请不要回复此邮件，任何问题请联系QQ 2399447849
+
+感谢您的使用。
+
+此致，
+         Admin: guomaoqiu
+
+The Platform PowerBy Nginx/uWSGI/Flask/Supervisor/MySQL/Docker
+
+Thansk!!！
