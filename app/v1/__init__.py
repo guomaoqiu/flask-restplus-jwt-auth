@@ -2,8 +2,8 @@
 # @Author: guomaoqiu
 # @File Name: __init__.py
 # @Date:   2018-08-19 00:08:41
-# @Last Modified by:   Green
-# @Last Modified time: 2018-08-19 02:41:40
+# @Last Modified by:   guomaoqiu@sina.com
+# @Last Modified time: 2018-08-19 17:53:38
 from flask import Blueprint
 from flask_restplus import Api
 
@@ -28,7 +28,7 @@ v1_api = Api(v1_blueprint,
             default="auth", 
             default_label=None,
             authorizations=authorizations,
-            security='apiKey ')
+            security='apiKey')
 
 
              

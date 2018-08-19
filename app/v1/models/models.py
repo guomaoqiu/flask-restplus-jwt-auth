@@ -2,8 +2,8 @@
 # @Author: guomaoqiu
 # @File Name: models.py
 # @Date:   2018-08-18 18:03:19
-# @Last Modified by:   Green
-# @Last Modified time: 2018-08-19 12:09:45
+# @Last Modified by:   guomaoqiu@sina.com
+# @Last Modified time: 2018-08-19 15:02:16
 
 
 from app import db
@@ -40,9 +40,11 @@ class User(db.Model):
             self.avatar_hash = hashlib.md5(
                 self.email.encode('utf-8')).hexdigest()
 
+    # Hash the register user password
     def hash_password(self, password):
         self.password_hash = pwd_context.encrypt(password)
 
+    # Check password
     def verify_password(self, password):
         return pwd_context.verify(password, self.password_hash)
 
@@ -54,20 +56,20 @@ class User(db.Model):
 
             # Generate admin token with flag 1.
             token = jwt.dumps({'email': self.email, 'admin': 1})
-
+            
             # Return admin flag.
             return token
 
             # Check if admin.
         elif permission_level == 2:
 
-            # Generate admin token with flag 1.
+            # Generate admin token with flag 2.
             token = jwt.dumps({'email': self.email, 'admin': 2})
 
             # Return admin flag.
             return token
 
-        # Return normal user flag.
+        # Return normal user flag permission_level == 0 .
         return jwt.dumps({'email': self.email, 'admin': 0})
 
     # Generates a new access token from refresh token.
@@ -91,10 +93,10 @@ class User(db.Model):
 
             # Set email from jwt.
             g.user = data['email']
-            #print g.user
+
             # Set admin permission from jwt.
-            g.admin = data['admin']
-            #print g.admin
+            g.admin=data['admin']
+            
 
             # Return true.
             return True

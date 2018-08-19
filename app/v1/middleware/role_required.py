@@ -2,8 +2,8 @@
 # @Author: guomaoqiu
 # @File Name: role_required.py
 # @Date:   2018-08-18 22:04:29
-# @Last Modified by:   Green
-# @Last Modified time: 2018-08-19 11:58:42
+# @Last Modified by:   guomaoqiu@sina.com
+# @Last Modified time: 2018-08-19 17:40:27
 import logging
 import functools
 from app.v1 import errors as error
@@ -19,37 +19,44 @@ def permission(arg):
         def decorated(*args, **kwargs):
 
             # Get request authorization.
+            # 获取请求认证
             auth = request.authorization
-            print auth
-
+            print request.headers
             # Check if auth is none or not.
             if auth is None and 'Authorization' in request.headers:
 
                 try:
-                    # Get auth type and token.
+                    # 获取auth type 跟 token.
                     auth_type, token = request.headers['Authorization'].split(None, 1)
-                    print auth_type,token
-                    # Generate new token.
+                    
+                    # 反序列化 token
                     data = jwt.loads(token)
-                    print data
+                    #print data
 
+                    if data['admin'] == 2:
+                        print "Your role is sa ."
+                    elif data['admin'] == 1:
+                        print "Your role is admin ."
+                    else:
+                        print "Your role is user .".format(data['admin'])
 
-                    # Check if admin
+                    # permission_level来判断权限
                     if data['admin'] < arg:
 
-                        # Return if user is not admin.
-                        return error.NOT_ADMIN
+                        # 如果用户不是对应的角色.
+                        return  {"message": "Permission denied, your role code is {} .".format(data['admin'])}, 403 
 
                 except ValueError:
                     # The Authorization header is either empty or has no token.
                     return error.HEADER_NOT_FOUND
+                    return {"message": "Headr Not Found ."}, 404 
 
                 except Exception as why:
                     # Log the error.
                     logging.error(why)
 
                     # If it does not generated return false.
-                    return error.INVALID_INPUT_422
+                    return {"message": "Invalid input ."}, 422 
 
             # Return method.
             return f(*args, **kwargs)

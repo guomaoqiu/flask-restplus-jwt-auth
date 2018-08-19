@@ -2,10 +2,8 @@
 # @Author: guomaoqiu
 # @File Name: errors.py
 # @Date:   2018-08-18 17:17:43
-# @Last Modified by:   Green
-# @Last Modified time: 2018-08-19 12:01:59
-
-
+# @Last Modified by:   guomaoqiu@sina.com
+# @Last Modified time: 2018-08-19 15:14:35
 
 # 200 OK - [GET]：服务器成功返回用户请求的数据
 # 201 CREATED - [POST/PUT/PATCH]：用户新建或修改数据成功
@@ -21,8 +19,6 @@
 # 500 INTERNAL SERVER ERROR - [*]：服务器发生错误，用户将无法判断发出的请求是否成功
 from flask import make_response,jsonify
 from app.v1.conf.auth import auth
-
-
 
 
 SERVER_ERROR_500 = ({"message": "An error occured."}, 500)

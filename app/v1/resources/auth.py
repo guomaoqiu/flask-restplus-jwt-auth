@@ -2,8 +2,8 @@
 # @Author: guomaoqiu
 # @File Name: auth.py
 # @Date:   2018-08-19 00:08:26
-# @Last Modified by:   Green
-# @Last Modified time: 2018-08-19 12:19:15
+# @Last Modified by:   guomaoqiu@sina.com
+# @Last Modified time: 2018-08-19 16:53:33
 
 
 import logging
@@ -90,6 +90,7 @@ class Register(Resource):
 
 @auth_ns.route('/login')
 class Login(Resource):
+    ''' 用户登录 '''
     @auth_ns.expect(login_model, validate=True)
     @auth_ns.param(paramType="header", name="fdsfsd")
 
@@ -126,15 +127,15 @@ class Login(Resource):
                 'message': '用户未激活.'
                 }
 
-        # Check passowrd    
+        # 如果密码认证通过，则通过登录用户角色生成access_token
+        # 这里分了三种角色(用户注册时就已经分配好了默认角色user)
+        # user：0，admin:1, sa:2   
         if user is not None and user.verify_password(password):
         
             if user.user_role == 'user':
 
                 # Generate access token. This method takes boolean value for checking admin or normal user. Admin: 1 or 0.
                 access_token = user.generate_auth_token(0)
-                print access_token
-                print user.username
 
             # If user is admin.
             elif user.user_role == 'admin':
@@ -151,7 +152,7 @@ class Login(Resource):
             else:
                 return error.INVALID_INPUT_422
 
-            # Generate refresh token.
+            # 根据用户登录邮箱生成refresh_token.
             refresh_token = refresh_jwt.dumps({'email': email})
 
             # Commit session.
@@ -173,14 +174,3 @@ class Login(Resource):
         else:
             # return invalid passowrd
             return error.PASSWORD_INVALID_421      
-
-@auth_ns.route('/get_user_data')
-class DataUserRequired(Resource):
-
-    @auth_ns.doc(security='apiKey')
-    # @api_doc_required.permission
-    @auth.login_required
-    @role_required.permission(0)
-    def get(self):
-
-        return 'ok'
