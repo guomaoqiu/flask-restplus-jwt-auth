@@ -2,8 +2,8 @@
 # @Author: guomaoqiu
 # @File Name: api_doc_required.py
 # @Date:   2018-08-19 01:42:22
-# @Last Modified by:   Green
-# @Last Modified time: 2018-08-19 02:51:04
+# @Last Modified by:   guomaoqiu@sina.com
+# @Last Modified time: 2018-08-19 23:42:48
 #
 from flask import request
 from functools import wraps 
@@ -13,7 +13,6 @@ def permission(f):
     def decorated(*args, **kwargs):
 
         token = None
-
         if 'X-API-KEY' in request.headers:
             token = request.headers['X-API-KEY']
 

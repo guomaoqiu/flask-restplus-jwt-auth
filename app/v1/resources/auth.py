@@ -3,7 +3,7 @@
 # @File Name: auth.py
 # @Date:   2018-08-19 00:08:26
 # @Last Modified by:   guomaoqiu@sina.com
-# @Last Modified time: 2018-08-19 16:53:33
+# @Last Modified time: 2018-08-20 23:40:47
 
 
 import logging
@@ -21,19 +21,18 @@ from datetime import datetime
 # from app.v1.schemas.schemas import UserSchema
 from app.v1.mail.email import send_email
 from app.v1 import v1_api
+from app.v1.middleware import api_doc_required,role_required
 from flask_restplus import Resource, Namespace, fields
 from app.v1.fields.auth_ns import register_model,login_model
+from flask_login import current_user
 
 
 auth_ns = Namespace('auth')
 
-
 @auth_ns.route('/register')
-class Register(Resource):
+class RegisterAPI(Resource):
+    """注册接口"""
     @auth_ns.expect(register_model, validate=True)
-   
-    @auth_ns.response(405, 'userndsdrd incorrect')
-
     def post(self):
         try:
             # Get username, password and email.
@@ -45,35 +44,34 @@ class Register(Resource):
             logging.info("Username, password or email is wrong. " + str(why))
 
             # Return invalid input error.
-            return error.INVALID_INPUT_422
+            return {"message" : "invalid input."}, 422
 
         # Check if any field is none.
         if username is None or password is None or email is None:
-            return error.INVALID_INPUT_422
+            return {"message" : "invalid input."}, 422
 
         # Get user if it is existed.
         user = User.query.filter_by(email=email,username=username).first()
 
         # Check if user is existed.
         if user is not None:
-           return error.ALREADY_EXIST
+           return {"message" : "already exist."},922
 
         # Create a new user.
         user = User(username=username, password_hash=password, email=email)
         user.hash_password(password)
 
         # Add user to session.
-        db.session.add(user)
+        #db.session.add(user)
 
         # Commit session.
-        db.session.commit()
+        #db.session.commit()
 
         # Return success if registration is completed.
-        token = user.generate_confirmation_token()
-
+        confirm_token = user.generate_confirmation_token(user.email,user.username)
+        print ("%s Confirm_token is: %s" % (user.username,confirm_token + "?email="+user.email))
         # build confirm url
-        #confirm_url = url_for('confirm', token=token, _external=True) + "?email=" + user.email
-        #print confirm_url
+        print url_for("v1_blueprint.confirm")
 
         #send_email(user.email, 'Confirm Email', 'email_tpl/confirm', user=user, token=token, confirm_url=confirm_url)
 
@@ -89,11 +87,9 @@ class Register(Resource):
                 }
 
 @auth_ns.route('/login')
-class Login(Resource):
-    ''' 用户登录 '''
+class LoginAPI(Resource):
+    """登录接口"""
     @auth_ns.expect(login_model, validate=True)
-    @auth_ns.param(paramType="header", name="fdsfsd")
-
     def post(self):
 
         try:
@@ -106,26 +102,22 @@ class Login(Resource):
             logging.info("Email or password is wrong. " + str(why))
 
             # Return invalid input error.
-            return error.INVALID_INPUT_422
+            return {"message" : "invalid input."}, 422
 
         # Check if user information is none.
         if email is None or password is None:
 
-            return error.INVALID_INPUT_422
+            return {"message" : "invalid input."}, 422
 
         # Get user if it is existed.
         user = User.query.filter_by(email=email).first()
 
         # Check if user is not existed.
         if user is None:
-
-            return error.DOES_NOT_EXIST
+            return {"message" : "does not exist."}, 404
 
         if not user.is_active:
-            return {
-                'status': 1,
-                'message': '用户未激活.'
-                }
+            return {'message': 'user not activated.'}, 988
 
         # 如果密码认证通过，则通过登录用户角色生成access_token
         # 这里分了三种角色(用户注册时就已经分配好了默认角色user)
@@ -150,7 +142,7 @@ class Login(Resource):
                 access_token = user.generate_auth_token(2)
 
             else:
-                return error.INVALID_INPUT_422
+                return  {"message" : "invalid input."}, 422
 
             # 根据用户登录邮箱生成refresh_token.
             refresh_token = refresh_jwt.dumps({'email': email})
@@ -172,5 +164,22 @@ class Login(Resource):
                         }
                     }
         else:
-            # return invalid passowrd
-            return error.PASSWORD_INVALID_421      
+            # 返回无效密码提示
+            return  {"message" : "invalid pasword."}, 421      
+
+
+
+@auth_ns.route('/confirm/<confirm_token>',endpoint="confirm")
+class Confirm(Resource):
+    """登录接口"""
+    # @auth_ns.expect(login_model, validate=True)
+    @auth_ns.param('email',required=True)
+
+    def get(self,confirm_token):
+
+        confirm_email=request.args.get('email')
+        user = User()
+        if user.verify_confirm_token(confirm_token,confirm_email):
+            return {'message':'User is active now'}, 200
+        else: 
+            return {'message':'User email confrim faild.'}, 202

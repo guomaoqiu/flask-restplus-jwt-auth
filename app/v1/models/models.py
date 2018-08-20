@@ -3,17 +3,15 @@
 # @File Name: models.py
 # @Date:   2018-08-18 18:03:19
 # @Last Modified by:   guomaoqiu@sina.com
-# @Last Modified time: 2018-08-19 15:02:16
+# @Last Modified time: 2018-08-20 23:04:14
 
 
 from app import db
 from app.v1.conf.auth import jwt, auth
 from flask import g,current_app,request
-from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
 import hashlib
 from datetime import datetime
 from passlib.apps import custom_app_context as pwd_context
-
 
 
 class User(db.Model):
@@ -50,7 +48,7 @@ class User(db.Model):
 
     # Generates auth token.
     def generate_auth_token(self, permission_level):
-
+        """生成token"""
         # Check if admin.
         if permission_level == 1:
 
@@ -76,7 +74,7 @@ class User(db.Model):
     @staticmethod
     @auth.verify_token
     def verify_auth_token(token):
-
+        """验证token"""
         # Create a global none user.
         g.user = None
 
@@ -105,20 +103,34 @@ class User(db.Model):
 
 
     # Generates confirmation token.    
-    def generate_confirmation_token(self):
-        return jwt.dumps({'confirm': self.id})
+    def generate_confirmation_token(self,email,username):
+
+        return jwt.dumps({'email': self.email,'username':self.username})
 
     # Check token
-    def confirm(self, token):
+    def verify_confirm_token(self,confirm_token,confirm_email):
+
         try:
-            data = jwt.loads(token)
+            
+            data = jwt.loads(confirm_token)
+            
+            user = User.query.filter_by(email=data['email']).first()
+
+            if user and confirm_email == data['email']:
+
+                # update is_active is 1.
+                user.is_active = 1
+
+                db.session.add(user)
+
+                db.session.commit()
+
+                return True
+
         except:
+            
             return False
-        if data.get('confirm') != self.id:
-            return False
-        self.is_active = True
-        db.session.add(self)
-        return True
+        
 
     # Get reset token    
     def generate_reset_token(self):
@@ -153,7 +165,6 @@ class User(db.Model):
             self.email.encode('utf-8')).hexdigest()
         data = '{url}/{hash}?s={size}&d={default}&r={rating}'.format(
             url=url, hash=hash, size=size, default=default, rating=rating)
-        print data
         return data       
 
     # Change email

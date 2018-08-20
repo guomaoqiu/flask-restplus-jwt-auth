@@ -3,7 +3,7 @@
 # @File Name: role_required.py
 # @Date:   2018-08-18 22:04:29
 # @Last Modified by:   guomaoqiu@sina.com
-# @Last Modified time: 2018-08-19 17:40:27
+# @Last Modified time: 2018-08-19 23:43:16
 import logging
 import functools
 from app.v1 import errors as error
@@ -21,7 +21,6 @@ def permission(arg):
             # Get request authorization.
             # 获取请求认证
             auth = request.authorization
-            print request.headers
             # Check if auth is none or not.
             if auth is None and 'Authorization' in request.headers:
 
@@ -34,11 +33,11 @@ def permission(arg):
                     #print data
 
                     if data['admin'] == 2:
-                        print "Your role is sa ."
+                        print ("Your role is sa .")
                     elif data['admin'] == 1:
-                        print "Your role is admin ."
+                        print ("Your role is admin .")
                     else:
-                        print "Your role is user .".format(data['admin'])
+                        print ("Your role is user .".format(data['admin']))
 
                     # permission_level来判断权限
                     if data['admin'] < arg:

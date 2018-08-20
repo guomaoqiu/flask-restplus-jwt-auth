@@ -2,8 +2,8 @@
 # @Author: guomaoqiu
 # @File Name: config.py
 # @Date:   2018-08-18 16:55:23
-# @Last Modified by:   Green
-# @Last Modified time: 2018-08-19 00:23:33
+# @Last Modified by:   guomaoqiu@sina.com
+# @Last Modified time: 2018-08-20 00:01:54
 
 import os
 
@@ -34,7 +34,7 @@ class DevelopmentConfig(Config):
     db_user = 'root'
     db_pass = '123.com'
     db_name = 'restapi'
-    SQLALCHEMY_DATABASE_URI = 'mysql://' + db_user + ':' + db_pass + '@' + db_host + '/' + db_name
+    SQLALCHEMY_DATABASE_URI = 'mysql+pymysql://' + db_user + ':' + db_pass + '@' + db_host + '/' + db_name
     SQLALCHEMY_ECHO=False
 
     SQLALCHEMY_TRACK_MODIFICATIONS=True
