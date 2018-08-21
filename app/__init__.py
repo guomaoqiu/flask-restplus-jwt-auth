@@ -3,11 +3,12 @@
 # @File Name: __init__.py
 # @Date:   2018-08-18 23:28:31
 # @Last Modified by:   guomaoqiu@sina.com
-# @Last Modified time: 2018-08-21 22:03:11
+# @Last Modified time: 2018-08-22 00:03:31
 
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from config import config
+
 
 db = SQLAlchemy()
 
@@ -22,8 +23,8 @@ def create_app(config_name):
 
     from .v1 import v1_blueprint
     
-    app.register_blueprint(v1_blueprint, url_prefix='/restapi/v1')
-    
+    app.register_blueprint(v1_blueprint, url_prefix='/api/v1')
+
 
     
     # Swagger ui config
@@ -33,4 +34,7 @@ def create_app(config_name):
     # You can also specify the initial expansion state with \
     # the config.SWAGGER_UI_DOC_EXPANSION setting ('none', 'list' or 'full'):
     # app.config.SWAGGER_UI_DOC_EXPANSION = 'list'
+
+
+ 
     return app

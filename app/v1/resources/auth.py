@@ -3,7 +3,7 @@
 # @File Name: auth.py
 # @Date:   2018-08-19 00:08:26
 # @Last Modified by:   guomaoqiu@sina.com
-# @Last Modified time: 2018-08-21 19:02:02
+# @Last Modified time: 2018-08-22 01:05:44
 
 
 import logging
@@ -12,7 +12,7 @@ import logging
 from flask import request,jsonify
 from app import db
 from app.v1.middleware import api_doc_required,role_required
-from app.v1 import errors as error
+from app.v1.errors import CustomFlaskErr
 from app.v1.conf.auth import refresh_jwt,auth
 from app.v1.models.models import User, Blacklist
 from app.v1.conf.auth import auth
@@ -25,6 +25,7 @@ from app.v1.middleware import api_doc_required,role_required
 from flask_restplus import Resource, Namespace, fields, reqparse
 from app.v1.fields.auth_ns import register_model,login_model,rest_password_model
 from validate_email import validate_email
+
 
 auth_ns = Namespace('auth')
 
@@ -43,7 +44,7 @@ parser.add_argument('Authorization',
 class RegisterRquired(Resource):
     """注册接口"""
     @auth_ns.expect(register_model, validate=True)
-    def post():
+    def post(self):
         try:
             # Get username, password and email.
             reg_username, reg_password, reg_email = request.json.get('username').strip(), \
@@ -143,7 +144,9 @@ class LoginRquired(Resource):
 
         # Check if user is not existed.
         if user is None:
-            return {"message" : "does not exist."}, 404
+            raise CustomFlaskErr("sssssss", status_code=400)
+        #return "ok"
+            # return {"message" : "does not exist."}, 404
 
         if not user.is_active:
             return {'message': 'user not activated.'}, 988
@@ -218,7 +221,7 @@ class ConfirmRquired(Resource):
 
         else:
 
-           return {'message':'User email confirmation failed,\ token may have expired, or email invalid'}, 202
+           return {'message':'User email confirmation failed, token may have expired, or email invalid'}, 202
 
 
 ####################               
@@ -253,3 +256,28 @@ class RestPasswordRequired(Resource):
 
     def put(self):
         pass
+
+####################               
+# RefreshTokenRequired
+####################
+
+@auth_ns.route('/refresh_token')
+class RefreshRequired(Resource):
+    """登录接口"""
+    # @auth_ns.doc(parser=parser)
+    @auth_ns.expect(rest_password_model, validate=True)
+
+    #@auth_ns.param('email',location='body',required=True)
+    #@auth_ns.param('new_password',location='body',required=True)
+
+    def put(self):
+        pass
+
+
+# from app.v1.errors import CustomFlaskErr
+from app.v1 import errors
+@auth_ns.route('/test')
+class Restest(Resource):
+    """docstring for test"""
+    def get(self):
+        raise ValidationError('Username already in use.')

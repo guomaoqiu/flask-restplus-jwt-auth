@@ -3,7 +3,7 @@
 # @File Name: models.py
 # @Date:   2018-08-18 18:03:19
 # @Last Modified by:   guomaoqiu@sina.com
-# @Last Modified time: 2018-08-21 18:00:31
+# @Last Modified time: 2018-08-21 23:11:37
 
 import logging
 from app import db
@@ -81,9 +81,11 @@ class User(db.Model):
         try:
             # Load token.
             data = jwt.loads(token)
+            # raise 'ssssssss'
 
         except:
             # If any error return false.
+            raise 'ssssssss'
             return False
 
         # Check if email and admin permission variables are in jwt.
