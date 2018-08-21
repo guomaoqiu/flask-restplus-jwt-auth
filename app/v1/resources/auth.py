@@ -3,7 +3,7 @@
 # @File Name: auth.py
 # @Date:   2018-08-19 00:08:26
 # @Last Modified by:   guomaoqiu@sina.com
-# @Last Modified time: 2018-08-21 12:18:52
+# @Last Modified time: 2018-08-21 14:15:46
 
 
 import logging
@@ -32,12 +32,14 @@ auth_ns = Namespace('auth')
 @auth_ns.route('/register')
 class RegisterAPI(Resource):
     """注册接口"""
+    # @auth_ns.doc(parser=register_parser)
     @auth_ns.expect(register_model, validate=True)
     def post(self):
         try:
             # Get username, password and email.
-            username, password, email = request.json.get('username').strip(), request.json.get('password').strip(), \
+            reg_username, reg_password, reg_email = request.json.get('username').strip(), request.json.get('password').strip(), \
                                         request.json.get('email').strip()
+            print reg_username,reg_password,reg_email
      
         except Exception as why:
 
@@ -45,35 +47,34 @@ class RegisterAPI(Resource):
             logging.info("Username, password or email is wrong. " + str(why))
 
             # Return invalid input error.
-            return {"message" : "invalid input."}, 422
+            return {"message" : "invalid input.5555"}, 422
 
         # Check if any field is none.
-        if username is None or password is None or email is None:
+        if reg_username is None or reg_password is None or reg_email is None:
 
-            return {"message" : "invalid input."}, 422
+            return {"message" : "invalid inputxcccccc."}, 422
 
-        if not validate_email(email):
+        if not validate_email(reg_email):
             return {"message" : "email invalid input."}, 423
     
         # Get user if it is existed.
-        user = User.query.filter_by(email=email,username=username).first()
+        user = User.query.filter_by(email=reg_email,username=reg_username).first()
 
         # Check if user is existed.
         if user is not None:
-           return {"message" : "already exist."}, 922
-
+           return {"message" : "user already exist."}, 922
+        
         # Create a new user.
-        user = User(username=username, password_hash=password, email=email)
-        user.hash_password(password)
+        user = User(username=reg_username, password_hash=reg_password, email=reg_email)
+        user.hash_password(reg_password)
 
         # Add user to session.
-        #db.session.add(user)
-
+        db.session.add(user)
         # Commit session.
-        #db.session.commit()
+        db.session.commit()
 
         # Return success if registration is completed.
-        #confirm_token = user.generate_confirmation_token(user.email,user.username)
+        confirm_token = user.generate_confirmation_token(user.email,user.username)
         
         #print ("%s Confirm_token is: %s" % (user.username,confirm_token + "?email="+user.email))
         # build confirm url
@@ -86,7 +87,7 @@ class RegisterAPI(Resource):
                 'message': "注册成功，请检查邮件进行确认.",
                     'data': {
                         'user_id': user.id,
-                        'username': username,
+                        'username': reg_username,
                         'create_time': str(user.member_since)
                     }
                 
