@@ -3,7 +3,7 @@
 # @File Name: auth.py
 # @Date:   2018-08-19 00:08:26
 # @Last Modified by:   guomaoqiu@sina.com
-# @Last Modified time: 2018-08-20 23:40:47
+# @Last Modified time: 2018-08-21 12:18:52
 
 
 import logging
@@ -22,12 +22,12 @@ from datetime import datetime
 from app.v1.mail.email import send_email
 from app.v1 import v1_api
 from app.v1.middleware import api_doc_required,role_required
-from flask_restplus import Resource, Namespace, fields
+from flask_restplus import Resource, Namespace, fields, reqparse
 from app.v1.fields.auth_ns import register_model,login_model
-from flask_login import current_user
-
+from validate_email import validate_email
 
 auth_ns = Namespace('auth')
+
 
 @auth_ns.route('/register')
 class RegisterAPI(Resource):
@@ -38,6 +38,7 @@ class RegisterAPI(Resource):
             # Get username, password and email.
             username, password, email = request.json.get('username').strip(), request.json.get('password').strip(), \
                                         request.json.get('email').strip()
+     
         except Exception as why:
 
             # Log input strip or etc. errors.
@@ -48,14 +49,18 @@ class RegisterAPI(Resource):
 
         # Check if any field is none.
         if username is None or password is None or email is None:
+
             return {"message" : "invalid input."}, 422
 
+        if not validate_email(email):
+            return {"message" : "email invalid input."}, 423
+    
         # Get user if it is existed.
         user = User.query.filter_by(email=email,username=username).first()
 
         # Check if user is existed.
         if user is not None:
-           return {"message" : "already exist."},922
+           return {"message" : "already exist."}, 922
 
         # Create a new user.
         user = User(username=username, password_hash=password, email=email)
@@ -68,10 +73,11 @@ class RegisterAPI(Resource):
         #db.session.commit()
 
         # Return success if registration is completed.
-        confirm_token = user.generate_confirmation_token(user.email,user.username)
-        print ("%s Confirm_token is: %s" % (user.username,confirm_token + "?email="+user.email))
+        #confirm_token = user.generate_confirmation_token(user.email,user.username)
+        
+        #print ("%s Confirm_token is: %s" % (user.username,confirm_token + "?email="+user.email))
         # build confirm url
-        print url_for("v1_blueprint.confirm")
+        #print url_for("v1_blueprint.confirm")
 
         #send_email(user.email, 'Confirm Email', 'email_tpl/confirm', user=user, token=token, confirm_url=confirm_url)
 
@@ -182,4 +188,4 @@ class Confirm(Resource):
         if user.verify_confirm_token(confirm_token,confirm_email):
             return {'message':'User is active now'}, 200
         else: 
-            return {'message':'User email confrim faild.'}, 202
+            return {'message':'User email confirm faild.'}, 202

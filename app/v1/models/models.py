@@ -3,7 +3,7 @@
 # @File Name: models.py
 # @Date:   2018-08-18 18:03:19
 # @Last Modified by:   guomaoqiu@sina.com
-# @Last Modified time: 2018-08-20 23:04:14
+# @Last Modified time: 2018-08-21 11:52:14
 
 
 from app import db
@@ -69,7 +69,7 @@ class User(db.Model):
 
         # Return normal user flag permission_level == 0 .
         return jwt.dumps({'email': self.email, 'admin': 0})
-
+  
     # Generates a new access token from refresh token.
     @staticmethod
     @auth.verify_token
