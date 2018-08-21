@@ -3,4 +3,8 @@
 # @File Name: __init__.py
 # @Date:   2018-08-18 17:35:02
 # @Last Modified by:   guomaoqiu@sina.com
-# @Last Modified time: 2018-08-19 14:16:17
+# @Last Modified time: 2018-08-21 14:51:44
+from flask import Blueprint
+auth = Blueprint('auth', __name__)
+
+from . import auth

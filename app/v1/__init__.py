@@ -3,7 +3,7 @@
 # @File Name: __init__.py
 # @Date:   2018-08-19 00:08:41
 # @Last Modified by:   guomaoqiu@sina.com
-# @Last Modified time: 2018-08-21 09:55:12
+# @Last Modified time: 2018-08-21 14:52:32
 from flask import Blueprint
 from flask_restplus import Api
 
@@ -34,8 +34,11 @@ v1_api = Api(v1_blueprint,
             )
 
 
+from .resources import auth
 from .resources.auth import auth_ns
 from .resources.user import user_ns
+
+v1_api.add_namespace(user_ns)
 
 v1_api.add_namespace(auth_ns)
 v1_api.add_namespace(user_ns)

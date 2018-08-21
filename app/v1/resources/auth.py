@@ -3,7 +3,7 @@
 # @File Name: auth.py
 # @Date:   2018-08-19 00:08:26
 # @Last Modified by:   guomaoqiu@sina.com
-# @Last Modified time: 2018-08-21 14:15:46
+# @Last Modified time: 2018-08-21 14:24:48
 
 
 import logging
@@ -66,19 +66,21 @@ class RegisterAPI(Resource):
         
         # Create a new user.
         user = User(username=reg_username, password_hash=reg_password, email=reg_email)
-        user.hash_password(reg_password)
 
-        # Add user to session.
-        db.session.add(user)
-        # Commit session.
-        db.session.commit()
+        # Hash register password
+        # user.hash_password(reg_password)
+
+        # # Add user to session.
+        # db.session.add(user)
+        # # Commit session.
+        # db.session.commit()
 
         # Return success if registration is completed.
         confirm_token = user.generate_confirmation_token(user.email,user.username)
         
         #print ("%s Confirm_token is: %s" % (user.username,confirm_token + "?email="+user.email))
         # build confirm url
-        #print url_for("v1_blueprint.confirm")
+        print url_for("confirm",confirm_token=confirm_token)
 
         #send_email(user.email, 'Confirm Email', 'email_tpl/confirm', user=user, token=token, confirm_url=confirm_url)
 

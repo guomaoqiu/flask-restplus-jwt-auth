@@ -3,7 +3,7 @@
 # @File Name: config.py
 # @Date:   2018-08-18 16:55:23
 # @Last Modified by:   guomaoqiu@sina.com
-# @Last Modified time: 2018-08-20 00:01:54
+# @Last Modified time: 2018-08-21 15:06:06
 
 import os
 
@@ -19,10 +19,10 @@ class Config:
     MAIL_PORT = 465
     MAIL_USE_SSL = True
     MAIL_USERNAME = '2399447849'
-    MAIL_PASSWORD =  'guomaoqiu.150019'
+    MAIL_PASSWORD =  ''
     FLASKY_MAIL_SUBJECT_PREFIX = u'[XXOO]'
     FLASKY_MAIL_SENDER = '2399447849@qq.com'
-    FLASKY_ADMIN = '2399447849@qq.com' # os.environ.get('FANXIANG_ADMIN')
+    FLASKY_ADMIN = '2399447849@qq.com'
     
     @staticmethod
     def init_app(app):
@@ -36,31 +36,15 @@ class DevelopmentConfig(Config):
     db_name = 'restapi'
     SQLALCHEMY_DATABASE_URI = 'mysql+pymysql://' + db_user + ':' + db_pass + '@' + db_host + '/' + db_name
     SQLALCHEMY_ECHO=False
-
     SQLALCHEMY_TRACK_MODIFICATIONS=True
-    #RECAPTCHA_PUBLIC_KEY = '6LdCijkUAAAAAKo5KAdTE7XR7yA_PRvLHgmVlGeW'
-    #RECAPTCHA_PRIVATE_KEY = '6LdCijkUAAAAAJTB0xosM4D_YTJmN3gxRmuJ-Jfj'
 
 class TestingConfig(Config):
-    TESTING = True
-    SQLALCHEMY_DATABASE_URI = 'mysql://flask:flask@127.0.0.1/flask-test'
-    WTF_CSRF_ENABLED = False
+    SQLALCHEMY_DATABASE_URI = 'sqlite://'
 
 class Production(Config):
-    DEBUG = True
-    db_host = 'db'
-    db_user = 'flask'
-    db_pass = 'local_ops'
-    db_name = 'local_ops'
-    SQLALCHEMY_DATABASE_URI = 'mysql://' + db_user + ':' + db_pass + '@' + db_host + '/' + db_name
-    SQLALCHEMY_ECHO=False #用于显式地禁用或启用查询记录
-
-    ##SQLALCHEMY_DATABASE_URI = 'mysql://flask1:flask1@127.0.0.1/flask1'
-    SQLALCHEMY_TRACK_MODIFICATIONS=True
-    #google 验证码
-    #RECAPTCHA_PUBLIC_KEY = '6LdCijkUAAAAAKo5KAdTE7XR7yA_PRvLHgmVlGeW'
-    #RECAPTCHA_PRIVATE_KEY = '6LdCijkUAAAAAJTB0xosM4D_YTJmN3gxRmuJ-Jfj'
-
+ 
+    SQLALCHEMY_DATABASE_URI = 'sqlite://'
+    
 config = {
     'development': DevelopmentConfig,
     'testing': TestingConfig,
