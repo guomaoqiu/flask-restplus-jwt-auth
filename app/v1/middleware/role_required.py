@@ -3,7 +3,7 @@
 # @File Name: role_required.py
 # @Date:   2018-08-18 22:04:29
 # @Last Modified by:   guomaoqiu@sina.com
-# @Last Modified time: 2018-08-19 23:43:16
+# @Last Modified time: 2018-08-21 18:45:17
 import logging
 import functools
 from app.v1 import errors as error
@@ -30,7 +30,7 @@ def permission(arg):
                     
                     # 反序列化 token
                     data = jwt.loads(token)
-                    #print data
+                    print data
 
                     if data['admin'] == 2:
                         print ("Your role is sa .")

@@ -3,13 +3,13 @@
 # @File Name: auth.py
 # @Date:   2018-08-14 21:04:02
 # @Last Modified by:   guomaoqiu@sina.com
-# @Last Modified time: 2018-08-21 17:36:42
+# @Last Modified time: 2018-08-21 18:42:31
 
 from flask_httpauth import HTTPTokenAuth
 from itsdangerous import TimedJSONWebSignatureSerializer as JWT
 
 # JWT creation.
-jwt = JWT('UbuQgGIdry*H&&I@', expires_in=930)
+jwt = JWT('UbuQgGIdry*H&&I@', expires_in=3600)
 
 # Refresh token creation.
 refresh_jwt = JWT('Ag93ZQ3KcGg&KUhR', expires_in=17200)

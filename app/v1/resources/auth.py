@@ -3,7 +3,7 @@
 # @File Name: auth.py
 # @Date:   2018-08-19 00:08:26
 # @Last Modified by:   guomaoqiu@sina.com
-# @Last Modified time: 2018-08-21 18:02:38
+# @Last Modified time: 2018-08-21 19:02:02
 
 
 import logging
@@ -23,22 +23,32 @@ from app.v1.mail.email import send_email
 from app.v1 import v1_api
 from app.v1.middleware import api_doc_required,role_required
 from flask_restplus import Resource, Namespace, fields, reqparse
-from app.v1.fields.auth_ns import register_model,login_model
+from app.v1.fields.auth_ns import register_model,login_model,rest_password_model
 from validate_email import validate_email
 
 auth_ns = Namespace('auth')
 
+parser = auth_ns.parser()
+parser.add_argument('Authorization',
+                    type=str,
+                    required=True,
+                    location='headers',
+                    help='Bearer Access Token')
 
+
+####################               
+# RegisterAPI
+####################
 @auth_ns.route('/register')
-class RegisterAPI(Resource):
+class RegisterRquired(Resource):
     """注册接口"""
-    # @auth_ns.doc(parser=register_parser)
     @auth_ns.expect(register_model, validate=True)
-    def post(self):
+    def post():
         try:
             # Get username, password and email.
-            reg_username, reg_password, reg_email = request.json.get('username').strip(), request.json.get('password').strip(), \
-                                        request.json.get('email').strip()
+            reg_username, reg_password, reg_email = request.json.get('username').strip(), \
+                                                    request.json.get('password').strip(), \
+                                                    request.json.get('email').strip()
      
         except Exception as why:
 
@@ -80,7 +90,9 @@ class RegisterAPI(Resource):
         confirm_token = user.generate_confirmation_token(user.email,user.username)
 
         # Generation email confirm url
-        confirm_url = url_for("v1_blueprint.confirm",confirm_token=confirm_token, _external=True)  + "?email="+user.email
+        confirm_url = url_for("v1_blueprint.confirm",
+                            confirm_token=confirm_token, 
+                            _external=True) + "?email="+user.email
 
         print confirm_url
 
@@ -97,11 +109,14 @@ class RegisterAPI(Resource):
                         'username': reg_username,
                         'create_time': str(user.member_since)
                     }
-                
                 }
 
+
+####################               
+# LoginAPI
+####################
 @auth_ns.route('/login')
-class LoginAPI(Resource):
+class LoginRquired(Resource):
     """登录接口"""
     @auth_ns.expect(login_model, validate=True)
     def post(self):
@@ -182,9 +197,11 @@ class LoginAPI(Resource):
             return  {"message" : "invalid pasword."}, 421      
 
 
-
+####################               
+# ConfirmRquired
+####################
 @auth_ns.route('/confirm/<confirm_token>',endpoint="confirm")
-class Confirm(Resource):
+class ConfirmRquired(Resource):
     """登录接口"""
     # @auth_ns.expect(login_model, validate=True)
     @auth_ns.param('email',required=True)
@@ -202,3 +219,37 @@ class Confirm(Resource):
         else:
 
            return {'message':'User email confirmation failed,\ token may have expired, or email invalid'}, 202
+
+
+####################               
+# RestPasswordRequired
+####################
+@auth_ns.route('/change_password')
+class RestPasswordRequired(Resource):
+    """登录接口"""
+    # @auth_ns.doc(parser=parser)
+    @auth_ns.expect(rest_password_model, validate=True)
+
+    #@auth_ns.param('email',location='body',required=True)
+    #@auth_ns.param('new_password',location='body',required=True)
+
+    def put(self):
+
+        pass
+
+
+####################               
+# RestPasswordRequired
+####################
+
+@auth_ns.route('/change_email')
+class RestPasswordRequired(Resource):
+    """登录接口"""
+    # @auth_ns.doc(parser=parser)
+    @auth_ns.expect(rest_password_model, validate=True)
+
+    #@auth_ns.param('email',location='body',required=True)
+    #@auth_ns.param('new_password',location='body',required=True)
+
+    def put(self):
+        pass
