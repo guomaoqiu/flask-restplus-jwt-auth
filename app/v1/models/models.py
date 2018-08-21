@@ -3,11 +3,11 @@
 # @File Name: models.py
 # @Date:   2018-08-18 18:03:19
 # @Last Modified by:   guomaoqiu@sina.com
-# @Last Modified time: 2018-08-21 11:52:14
+# @Last Modified time: 2018-08-21 18:00:31
 
-
+import logging
 from app import db
-from app.v1.conf.auth import jwt, auth
+from app.v1.conf.auth import jwt, auth, confirm_email_jwt
 from flask import g,current_app,request
 import hashlib
 from datetime import datetime
@@ -20,7 +20,7 @@ class User(db.Model):
     # User id.
     id = db.Column(db.Integer, primary_key=True)
     email = db.Column(db.String(64), unique=True, index=True)
-    username = db.Column(db.String(64), unique=True, index=True)
+    username = db.Column(db.String(64))
     user_role = db.Column(db.String(length=30), default='user')
     password_hash = db.Column(db.String(128))
     is_active = db.Column(db.Boolean, default=False)
@@ -69,7 +69,7 @@ class User(db.Model):
 
         # Return normal user flag permission_level == 0 .
         return jwt.dumps({'email': self.email, 'admin': 0})
-  
+
     # Generates a new access token from refresh token.
     @staticmethod
     @auth.verify_token
@@ -105,32 +105,35 @@ class User(db.Model):
     # Generates confirmation token.    
     def generate_confirmation_token(self,email,username):
 
-        return jwt.dumps({'email': self.email,'username':self.username})
+        return confirm_email_jwt.dumps({'email': self.email,'username':self.username})
 
     # Check token
-    def verify_confirm_token(self,confirm_token,confirm_email):
-
+    @staticmethod
+    def verify_confirm_token(confirm_token,confirm_email):
         try:
-            
-            data = jwt.loads(confirm_token)
-            
-            user = User.query.filter_by(email=data['email']).first()
 
-            if user and confirm_email == data['email']:
-
-                # update is_active is 1.
-                user.is_active = 1
-
-                db.session.add(user)
-
-                db.session.commit()
-
-                return True
-
-        except:
-            
-            return False
+            data = confirm_email_jwt.loads(confirm_token)
         
+        # if token is exp,return None
+        except Exception as why:
+            logging.info("User email confirmation failed, token may have expired " + str(why))
+            #print "token exp....."
+            return None 
+
+        if confirm_email == data['email']:
+
+            user = User.query.filter_by(email=data['email']).first()
+            
+            # set is_activce is 1
+            user.is_active = 1
+
+            db.session.add(user)
+            db.session.commit()
+            
+            return True
+        else:
+            return False
+ 
 
     # Get reset token    
     def generate_reset_token(self):
@@ -188,7 +191,7 @@ class User(db.Model):
     def __repr__(self):
 
         # This is only for representation how you want to see user information after query.
-        return "<User(id='%s', username='%s')>" % (self.id, self.username)
+        return "<User(id='%s', username='%s',email='%s')>" % (self.id, self.username, self.email)
 
     # 类方法 class_method  
     @classmethod

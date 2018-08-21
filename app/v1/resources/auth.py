@@ -3,7 +3,7 @@
 # @File Name: auth.py
 # @Date:   2018-08-19 00:08:26
 # @Last Modified by:   guomaoqiu@sina.com
-# @Last Modified time: 2018-08-21 14:24:48
+# @Last Modified time: 2018-08-21 18:02:38
 
 
 import logging
@@ -39,7 +39,6 @@ class RegisterAPI(Resource):
             # Get username, password and email.
             reg_username, reg_password, reg_email = request.json.get('username').strip(), request.json.get('password').strip(), \
                                         request.json.get('email').strip()
-            print reg_username,reg_password,reg_email
      
         except Exception as why:
 
@@ -52,37 +51,43 @@ class RegisterAPI(Resource):
         # Check if any field is none.
         if reg_username is None or reg_password is None or reg_email is None:
 
-            return {"message" : "invalid inputxcccccc."}, 422
+            return {"message" : "invalid input."}, 422
 
-        if not validate_email(reg_email):
-            return {"message" : "email invalid input."}, 423
+        # Check email address
+        if not validate_email(reg_email,check_mx=True,verify=True):
+          return {"message" : "email invalid input."}, 423
     
         # Get user if it is existed.
-        user = User.query.filter_by(email=reg_email,username=reg_username).first()
-
+        user = User.query.filter_by(email=reg_email).first()
+        
         # Check if user is existed.
         if user is not None:
-           return {"message" : "user already exist."}, 922
+
+            return {"message" : "user already exist."}, 922
         
         # Create a new user.
         user = User(username=reg_username, password_hash=reg_password, email=reg_email)
 
-        # Hash register password
-        # user.hash_password(reg_password)
+        #Hash register password
+        user.hash_password(reg_password)
 
-        # # Add user to session.
-        # db.session.add(user)
-        # # Commit session.
-        # db.session.commit()
-
+        # Add user to session.
+        db.session.add(user)
+        # Commit session.
+        db.session.commit()
+    
         # Return success if registration is completed.
         confirm_token = user.generate_confirmation_token(user.email,user.username)
-        
-        #print ("%s Confirm_token is: %s" % (user.username,confirm_token + "?email="+user.email))
-        # build confirm url
-        print url_for("confirm",confirm_token=confirm_token)
 
-        #send_email(user.email, 'Confirm Email', 'email_tpl/confirm', user=user, token=token, confirm_url=confirm_url)
+        # Generation email confirm url
+        confirm_url = url_for("v1_blueprint.confirm",confirm_token=confirm_token, _external=True)  + "?email="+user.email
+
+        print confirm_url
+
+        send_email(user.email, 'Confirm Email', 'email_tpl/confirm', 
+                    user=user.username, 
+                    token=confirm_token, 
+                    confirm_url=confirm_url)
 
         return {
                 'status': 0,
@@ -186,9 +191,14 @@ class Confirm(Resource):
 
     def get(self,confirm_token):
 
+        # Get Confirm email
         confirm_email=request.args.get('email')
-        user = User()
-        if user.verify_confirm_token(confirm_token,confirm_email):
-            return {'message':'User is active now'}, 200
-        else: 
-            return {'message':'User email confirm faild.'}, 202
+
+        # use staticmethod verify confirm toke
+        if User.verify_confirm_token(confirm_token,confirm_email):
+   
+           return {'message':'User is active now'}, 200
+
+        else:
+
+           return {'message':'User email confirmation failed,\ token may have expired, or email invalid'}, 202

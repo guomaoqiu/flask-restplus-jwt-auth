@@ -3,16 +3,15 @@
 # @File Name: manager.py
 # @Date:   2018-08-18 22:45:33
 # @Last Modified by:   guomaoqiu@sina.com
-# @Last Modified time: 2018-08-19 12:28:42
+# @Last Modified time: 2018-08-21 15:16:37
 
 import os
 from app import create_app, db
 from flask_script import Manager, Shell
 from flask_migrate import Migrate, MigrateCommand
 from livereload import Server
-# from flask import url_for,render_template,redirect
 
-app = create_app(os.getenv('FLASK_CONFIG') or 'default')
+app = create_app('default')
 manager = Manager(app)
 migrate = Migrate(app, db)
 
