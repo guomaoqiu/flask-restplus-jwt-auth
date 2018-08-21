@@ -16,5 +16,4 @@ Dear {{ user.username }} 特此谨致问候，
 此致，
          Admin: guomaoqiu
 
-
 Thansk!!！

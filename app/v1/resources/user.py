@@ -3,7 +3,7 @@
 # @File Name: user.py
 # @Date:   2018-08-18 17:00:27
 # @Last Modified by:   guomaoqiu@sina.com
-# @Last Modified time: 2018-08-21 18:48:56
+# @Last Modified time: 2018-08-21 22:07:45
 import logging
 # from app.v1.roles import role_required
  #import role_required, api_doc_requerid
@@ -58,7 +58,7 @@ class get_user_data(Resource):
         return 'admin data'
 
 @user_ns.route('/get_user_data')
-class get_user_data(Resource):
+class DeleterUserRequired(Resource):
 	# 获取用户数据，这里需要header 需要携带上access_token才可以
     @user_ns.doc(parser=parser)
     @auth.login_required
@@ -68,7 +68,7 @@ class get_user_data(Resource):
 
 
 @user_ns.route('/delete_user')
-class get_user_data(Resource):
+class DeleterUserRequired(Resource):
     # 获取用户数据，这里需要header 需要携带上access_token才可以
     @user_ns.doc(parser=parser)
     @auth.login_required

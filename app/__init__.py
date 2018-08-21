@@ -3,7 +3,7 @@
 # @File Name: __init__.py
 # @Date:   2018-08-18 23:28:31
 # @Last Modified by:   guomaoqiu@sina.com
-# @Last Modified time: 2018-08-21 15:26:51
+# @Last Modified time: 2018-08-21 22:03:11
 
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
@@ -23,6 +23,7 @@ def create_app(config_name):
     from .v1 import v1_blueprint
     
     app.register_blueprint(v1_blueprint, url_prefix='/restapi/v1')
+    
 
     
     # Swagger ui config
