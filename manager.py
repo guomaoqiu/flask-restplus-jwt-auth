@@ -20,7 +20,7 @@ manager.add_command('db', MigrateCommand)
 @manager.command
 def dev():
     live_server = Server(app.wsgi_app)
-    live_server.watch('**/*.*')
+    live_server.watch('/Users/Green/data/study/flask-restplus-jwt-auth/*')
     live_server.serve(open_url=False,port=5000,debug=True)
 
 

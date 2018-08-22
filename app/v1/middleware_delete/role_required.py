@@ -29,7 +29,6 @@ def permission(arg):
                     
                     # 反序列化 token
                     data = jwt.loads(token)
-                    print data
 
                     if data['admin'] == 2:
                         print ("Your role is sa .")

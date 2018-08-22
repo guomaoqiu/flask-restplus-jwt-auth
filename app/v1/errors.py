@@ -19,7 +19,7 @@
 # 500 INTERNAL SERVER ERROR - [*]：服务器发生错误，用户将无法判断发出的请求是否成功
 from flask import make_response,jsonify
 from app.v1 import v1_blueprint
-
+from app.v1.extensions.auth.jwt_auth import auth
 
 SERVER_ERROR_500 = ({"message": "An error occured."}, 500)
 NOT_FOUND_404 = ({"message": "Resource could not be found."}, 404)
@@ -35,11 +35,11 @@ HEADER_NOT_FOUND = ({"message": "Header does not exists."}, 999)
 
 
 # 自定义错误提示
-@v1_blueprint.errorhandler
+@auth.error_handler
 def unauthorized():
     return make_response(jsonify(
-    	{
-    		'message': 'ssssssssss Unauthorized Access'
+    	{	'status': 403,
+    		'message': 'Unauthorized Access'
     	}), 403)
 
 

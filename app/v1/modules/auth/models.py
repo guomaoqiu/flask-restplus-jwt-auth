@@ -8,7 +8,6 @@
 import logging
 from app import db
 from app.v1.extensions.auth.jwt_auth import jwt, auth, confirm_email_jwt
-# from app.v1.conf.auth import jwt, auth, confirm_email_jwt
 from flask import g, request
 import hashlib
 from datetime import datetime
@@ -54,7 +53,7 @@ class User(db.Model):
         if permission_level == 1:
 
             # Generate admin token with flag 1.
-            token = jwt.dumps({'email': self.email, 'admin': 1})
+            token = jwt.dumps({'email': self.email, 'admin': 1}).decode('ascii')
 
             # Return admin flag.
             return token
@@ -63,13 +62,17 @@ class User(db.Model):
         elif permission_level == 2:
 
             # Generate admin token with flag 2.
-            token = jwt.dumps({'email': self.email, 'admin': 2})
+            token = jwt.dumps({'email': self.email, 'admin': 2}).decode('ascii')
 
             # Return admin flag.
             return token
 
         # Return normal user flag permission_level == 0 .
-        return jwt.dumps({'email': self.email, 'admin': 0})
+        # python 2 dumps过后是str, 而在python3 中dumps的结果为bytes,
+        # 则需要将bytes转为字符串，即可 decode('ascii)
+        # 否则会报错: "TypeError: Object of type 'bytes' is not JSON serializable"
+        return jwt.dumps({'email': self.email, 'admin': 0}).decode('ascii')
+
 
     # Generates a new access token from refresh token.
     @staticmethod
@@ -82,7 +85,6 @@ class User(db.Model):
         try:
             # Load token.
             data = jwt.loads(token)
-            print data
 
         except:
             # If any error return false.
@@ -116,7 +118,7 @@ class User(db.Model):
         # if token is exp,return None
         except Exception as why:
             logging.info("User email confirmation failed, token may have expired " + str(why))
-            # print "token exp....."
+            print ("token exp.....")
             return None
 
         if confirm_email == data['email']:
@@ -136,7 +138,7 @@ class User(db.Model):
     # Get reset token
     def generate_reset_token(self):
 
-        return jwt.dumps({'reset': self.id})
+        return jwt.dumps({'reset': self.id}).decode('ascii')
 
     # Change password
     def reset_password(self, token, new_password):
@@ -208,8 +210,6 @@ class User(db.Model):
             }
 
         return {'users': list(map(lambda x: to_json(x), User.query.all()))}
-
-        # delete all user
 
     @classmethod
     def delete_all(cls):

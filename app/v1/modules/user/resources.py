@@ -9,7 +9,7 @@ import logging
 # import role_required, api_doc_requerid
 from flask import request, jsonify
 from app import db
-from app.v1.middleware import  role_required
+from app.v1.middleware_delete import  role_required
 from app.v1.modules.auth.models import User
 from app.v1.extensions.auth.jwt_auth import refresh_jwt, auth
 from flask_restplus import Resource, Namespace, fields
@@ -38,7 +38,7 @@ class DeleterUserRequired(Resource):
             db.session.delete(user)
             db.session.commit()
 
-            print "user {} deleted".format(user.username)
+            print ("user {} deleted".format(user.username))
             return {"message": "user {} delete success.".format(user.username)}, 200
         else:
             return {"message": "user {} does not exist.".format(email)}, 404

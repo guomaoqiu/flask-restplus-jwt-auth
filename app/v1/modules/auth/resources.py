@@ -83,7 +83,7 @@ class RegisterRquired(Resource):
                               confirm_token=confirm_token,
                               _external=True) + "?email=" + user.email
 
-        print confirm_url
+        print (confirm_url)
 
         send_email(user.email, 'Confirm Email', 'email_tpl/confirm',
                    user=user.username,
@@ -129,7 +129,6 @@ class LoginRquired(Resource):
 
         # Get user if it is existed.
         user = User.query.filter_by(email=email).first()
-
         # Check if user is not existed.
         if user is None:
             return {"message": "does not exist."}, 404
@@ -163,7 +162,7 @@ class LoginRquired(Resource):
                 return {"message": "invalid input."}, 422
 
             # 根据用户登录邮箱生成refresh_token.
-            refresh_token = refresh_jwt.dumps({'email': email})
+            refresh_token = (refresh_jwt.dumps({'email': email})).decode('ascii')
 
             # Commit session.
             db.session.commit()

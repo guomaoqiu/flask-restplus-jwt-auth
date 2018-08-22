@@ -13,5 +13,6 @@ curl -H "Content-Type: application/json" --data '{"username":"user7","password":
 curl -H "Content-Type: application/json" --data '{"username":"user8","password":"123.com", "email":"user8@qq.com"}' http://127.0.0.1:5000/api/v1/auth/register
 curl -H "Content-Type: application/json" --data '{"username":"user9","password":"123.com", "email":"user9@qq.com"}' http://127.0.0.1:5000/api/v1/auth/register
 curl -H "Content-Type: application/json" --data '{"username":"user10","password":"123.com", "email":"user10@qq.com"}' http://127.0.0.1:5000/api/v1/auth/register
+curl -H "Content-Type: application/json" --data '{"username":"admin","password":"123.com", "email":"user10@qq.com"}' http://127.0.0.1:5000/api/v1/auth/register
 
 mysql -uroot -p123.com -e "use restapi; update user set is_active = 1 where username like 'user%';"
