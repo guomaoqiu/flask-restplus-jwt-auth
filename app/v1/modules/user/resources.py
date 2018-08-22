@@ -4,16 +4,12 @@
 # @Date:   2018-08-18 17:00:27
 # @Last Modified by:   guomaoqiu@sina.com
 # @Last Modified time: 2018-08-21 23:05:38
-import logging
-# from app.v1.roles import role_required
-# import role_required, api_doc_requerid
-from flask import request, jsonify
-from app import db
-from app.v1.middleware_delete import  role_required
-from app.v1.modules.auth.models import User
-from app.v1.extensions.auth.jwt_auth import refresh_jwt, auth
-from flask_restplus import Resource, Namespace, fields
 
+from app import db
+from app.v1.extensions.auth import  role_required
+from app.v1.modules.auth.models import User
+from app.v1.extensions.auth.jwt_auth import  auth
+from flask_restplus import Resource, Namespace
 
 user_ns = Namespace('user')
 
@@ -22,7 +18,6 @@ parser.add_argument('Authorization', type=str,
                     location='headers',
                     help='Bearer Access Token',
                     required=True)
-
 
 @user_ns.route('/delete/<email>')
 class DeleterUserRequired(Resource):

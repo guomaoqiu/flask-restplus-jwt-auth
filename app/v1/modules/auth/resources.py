@@ -169,7 +169,7 @@ class LoginRquired(Resource):
 
             return {
                 'status': 0,
-                'message:': '登录成功',
+                'message:': 'Login Success',
                 'data': {
                     'user_id': user.id,
                     'is_active': user.is_active,
@@ -200,6 +200,10 @@ class ConfirmRquired(Resource):
         # Get Confirm email
         confirm_email = request.args.get('email')
 
+        # Check confirm email
+        if  validate_email(confirm_email, check_mx=True, verify=True):
+
+            return {"message": "email invalid input."}, 423
         # use staticmethod verify confirm toke
         if User.verify_confirm_token(confirm_token, confirm_email):
 

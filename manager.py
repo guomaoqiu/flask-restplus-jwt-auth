@@ -9,7 +9,6 @@ import os
 from app import create_app, db
 from flask_script import Manager
 from flask_migrate import Migrate, MigrateCommand
-from livereload import Server
 
 app = create_app('default')
 manager = Manager(app)
@@ -17,12 +16,7 @@ migrate = Migrate(app, db)
 
 manager.add_command('db', MigrateCommand)
 
-@manager.command
-def dev():
-    live_server = Server(app.wsgi_app)
-    live_server.watch('/Users/Green/data/study/flask-restplus-jwt-auth/*')
-    live_server.serve(open_url=False,port=5000,debug=True)
-
 
 if __name__ == '__main__':
-    manager.run()
+    app.run(use_reloader=True,debug=True)
+    #manager.run()
