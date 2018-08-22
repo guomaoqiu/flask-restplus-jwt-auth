@@ -3,18 +3,18 @@
 # @File Name: resources.py
 # @Date:   2018-08-19 00:08:26
 # @Last Modified by:   guomaoqiu@sina.com
-# @Last Modified time: 2018-08-22 20:30:57
+# @Last Modified time: 2018-08-22 21:42:58
 
 import logging
+
 from flask import request
-from app import db
-from app.v1.extensions.auth.jwt_auth import refresh_jwt, auth
-from .models import User, Blacklist
-from flask import g, url_for
-from app.v1.mail.email import send_email
 from flask_restplus import Resource, Namespace
-from .parameters import register_model, login_model, rest_password_model
 from validate_email import validate_email
+from app import db
+from app.v1.database.models import User
+from app.v1.extensions.auth.jwt_auth import refresh_jwt
+from .parameters import register_model, login_model, rest_password_model
+from app.v1.utils.user_utils import  save_new_user
 
 auth_ns = Namespace('auth')
 
@@ -26,78 +26,14 @@ parser.add_argument('Authorization',
                     help='Bearer Access Token')
 
 
-####################
-# RegisterAPI
-####################
 @auth_ns.route('/register')
 class RegisterRquired(Resource):
     """注册接口"""
+    @auth_ns.doc('user register')
     @auth_ns.expect(register_model, validate=True)
     def post(self):
-        try:
-            # Get username, password and email.
-            reg_username, reg_password, reg_email = request.json.get('username').strip(), \
-                                                    request.json.get('password').strip(), \
-                                                    request.json.get('email').strip()
-
-        except Exception as why:
-
-            # Log input strip or etc. errors.
-            logging.info("Username, password or email is wrong. " + str(why))
-
-            # Return invalid input error.
-            return {"message": "invalid input.5555"}, 422
-
-        # Check if any field is none.
-        if reg_username is None or reg_password is None or reg_email is None:
-            return {"message": "invalid input."}, 422
-
-        # Check email address
-        if not validate_email(reg_email, check_mx=True, verify=True):
-            return {"message": "email invalid input."}, 423
-
-        # Get user if it is existed.
-        user = User.query.filter_by(email=reg_email).first()
-
-        # Check if user is existed.
-        if user is not None:
-            return {"message": "user already exist."}, 922
-
-        # Create a new user.
-        user = User(username=reg_username, password_hash=reg_password, email=reg_email)
-
-        # Hash register password
-        user.hash_password(reg_password)
-
-        # Add user to session.
-        db.session.add(user)
-        # Commit session.
-        db.session.commit()
-
-        # Return success if registration is completed.
-        confirm_token = user.generate_confirmation_token(user.email, user.username)
-
-        # Generation email confirm url
-        confirm_url = url_for("v1_blueprint.confirm",
-                              confirm_token=confirm_token,
-                              _external=True) + "?email=" + user.email
-
-        print (confirm_url)
-
-        send_email(user.email, 'Confirm Email', 'email_tpl/confirm',
-                   user=user.username,
-                   token=confirm_token,
-                   confirm_url=confirm_url)
-
-        return {
-            'status': 0,
-            'message': "Registration is successful, please check the email to confirm.",
-            'data': {
-                'user_id': user.id,
-                'username': reg_username,
-                'create_time': str(user.member_since)
-            }
-        }
+        data = request.json
+        return save_new_user(data=data)
 
 
 ####################
@@ -106,7 +42,7 @@ class RegisterRquired(Resource):
 @auth_ns.route('/login')
 class LoginRquired(Resource):
     """登录接口"""
-
+    @auth_ns.doc('user login')
     @auth_ns.expect(login_model, validate=True)
     def post(self):
 
@@ -192,6 +128,7 @@ class LoginRquired(Resource):
 class ConfirmRquired(Resource):
     """登录接口"""
 
+    @auth_ns.doc('user email confirm')
     # @auth_ns.expect(login_model, validate=True)
     @auth_ns.param('email', required=True)
     def get(self, confirm_token):
@@ -218,8 +155,8 @@ class ConfirmRquired(Resource):
 ####################
 @auth_ns.route('/change_password')
 class RestPasswordRequired(Resource):
-    """登录接口"""
-
+    """重置密码"""
+    @auth_ns.doc('rest password')
     # @auth_ns.doc(parser=parser)
     @auth_ns.expect(rest_password_model, validate=True)
     # @auth_ns.param('email',location='body',required=True)
@@ -231,19 +168,19 @@ class RestPasswordRequired(Resource):
 
 ####################
 # RestPasswordRequired
-####################
-
-@auth_ns.route('/change_email')
-class RestPasswordRequired(Resource):
-    """登录接口"""
-
-    # @auth_ns.doc(parser=parser)
-    @auth_ns.expect(rest_password_model, validate=True)
-    # @auth_ns.param('email',location='body',required=True)
-    # @auth_ns.param('new_password',location='body',required=True)
-
-    def put(self):
-        pass
+# ####################
+#
+# @auth_ns.route('/change_email')
+# class RestPasswordRequired(Resource):
+#     """更改邮箱"""
+#
+#     # @auth_ns.doc(parser=parser)
+#     @auth_ns.expect(rest_password_model, validate=True)
+#     # @auth_ns.param('email',location='body',required=True)
+#     # @auth_ns.param('new_password',location='body',required=True)
+#
+#     def put(self):
+#         pass
 
 
 ####################
@@ -254,7 +191,7 @@ class RestPasswordRequired(Resource):
 
 class RefreshRequired(Resource):
     """登录接口"""
-
+    @auth_ns.doc('refresh token')
     # @auth_ns.doc(parser=parser)
     @auth_ns.expect(rest_password_model, validate=True)
     # @auth_ns.param('email',location='body',required=True)
@@ -264,13 +201,3 @@ class RefreshRequired(Resource):
         pass
 
 
-# from app.v1.errors import CustomFlaskErr
-from app.v1 import errors
-
-
-@auth_ns.route('/test')
-class Restest(Resource):
-    """docstring for test"""
-
-    def get(self):
-        return 'o'

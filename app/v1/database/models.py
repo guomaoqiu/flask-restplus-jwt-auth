@@ -16,10 +16,10 @@ from passlib.apps import custom_app_context as pwd_context
 
 class User(db.Model):
     # Generates default class name for table. For changing use
-    # __tablename__ = 'users'
-    # User id.
+    #__tablename__ = 'users'
     id = db.Column(db.Integer, primary_key=True)
     email = db.Column(db.String(64), unique=True, index=True)
+    public_id = db.Column(db.String(100), unique=True)
     username = db.Column(db.String(64))
     user_role = db.Column(db.String(length=30), default='user')
     password_hash = db.Column(db.String(128))
@@ -41,6 +41,7 @@ class User(db.Model):
     # Hash the register user password
     def hash_password(self, password):
         self.password_hash = pwd_context.encrypt(password)
+        return self.password_hash
 
     # Check password
     def verify_password(self, password):
@@ -104,9 +105,9 @@ class User(db.Model):
         return False
 
     # Generates confirmation token.
-    def generate_confirmation_token(self, email, username):
+    #def generate_confirmation_token(self, email, username):
 
-        return confirm_email_jwt.dumps({'email': self.email, 'username': self.username})
+    #    return confirm_email_jwt.dumps({'email': self.email, 'username': self.username})
 
     # Check token
     @staticmethod

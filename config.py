@@ -29,14 +29,14 @@ class Config:
         pass
 
 class DevelopmentConfig(Config):
-    DEBUG = False
+    DEBUG = True
     db_host = 'localhost'
     db_user = 'root'
     db_pass = '123.com'
     db_name = 'restapi'
     SQLALCHEMY_DATABASE_URI = 'mysql+pymysql://' + db_user + ':' + db_pass + '@' + db_host + '/' + db_name
     SQLALCHEMY_ECHO=False
-    SQLALCHEMY_TRACK_MODIFICATIONS=True
+    SQLALCHEMY_TRACK_MODIFICATIONS=False
 
 class TestingConfig(Config):
     SQLALCHEMY_DATABASE_URI = 'sqlite://'
