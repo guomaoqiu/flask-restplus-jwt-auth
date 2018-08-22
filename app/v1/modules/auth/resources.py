@@ -1,10 +1,9 @@
 # -*- coding: utf-8 -*-
 # @Author: guomaoqiu
-# @File Name: auth.py
+# @File Name: resources.py
 # @Date:   2018-08-19 00:08:26
 # @Last Modified by:   guomaoqiu@sina.com
-# @Last Modified time: 2018-08-22 01:05:44
-
+# @Last Modified time: 2018-08-22 20:30:57
 
 import logging
 from flask import request
@@ -92,7 +91,7 @@ class RegisterRquired(Resource):
 
         return {
             'status': 0,
-            'message': "注册成功，请检查邮件进行确认.",
+            'message': "Registration is successful, please check the email to confirm.",
             'data': {
                 'user_id': user.id,
                 'username': reg_username,
@@ -136,8 +135,8 @@ class LoginRquired(Resource):
         if not user.is_active:
             return {'message': 'user not activated.'}, 988
 
-        # 如果密码认证通过，则通过登录用户角色生成access_token
-        # 这里分了三种角色(用户注册时就已经分配好了默认角色user)
+        # Generate an access token if the password is correct.
+        # Three roles for user, default user role is user.
         # user：0，admin:1, sa:2
         if user is not None and user.verify_password(password):
 
@@ -161,7 +160,7 @@ class LoginRquired(Resource):
             else:
                 return {"message": "invalid input."}, 422
 
-            # 根据用户登录邮箱生成refresh_token.
+            # Generate refresh_token based on the user emamil.
             refresh_token = (refresh_jwt.dumps({'email': email})).decode('ascii')
 
             # Commit session.
@@ -180,13 +179,13 @@ class LoginRquired(Resource):
                 }
             }
         else:
-            # 返回无效密码提示
+            # Return invalid password
             return {"message": "invalid pasword."}, 421
 
 
-            ####################
+            
 
-
+####################
 # ConfirmRquired
 ####################
 @auth_ns.route('/confirm/<confirm_token>', endpoint="confirm")

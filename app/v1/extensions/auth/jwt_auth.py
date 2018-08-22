@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 # @Author: guomaoqiu
-# @File Name: auth.py
+# @File Name: jwt_auth.py
 # @Date:   2018-08-14 21:04:02
 # @Last Modified by:   guomaoqiu@sina.com
-# @Last Modified time: 2018-08-21 23:04:26
+# @Last Modified time: 2018-08-22 20:27:09
 
 from flask_httpauth import HTTPTokenAuth
 from itsdangerous import TimedJSONWebSignatureSerializer as JWT

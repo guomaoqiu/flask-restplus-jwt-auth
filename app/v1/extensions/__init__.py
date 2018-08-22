@@ -1,7 +1,6 @@
-#!/usr/bin/env python
 # -*- coding: utf-8 -*-
-# @Time    : 2018/8/22 14:52
-# @Author  : GuoMaoqiu
-# @Site    : 
-# @File    : __init__.py.py
-# @Software: PyCharm
+# @Author: guomaoqiu
+# @File Name: __init__.py
+# @Date:   2018-08-22 20:23:33
+# @Last Modified by:   guomaoqiu@sina.com
+# @Last Modified time: 2018-08-22 20:23:43

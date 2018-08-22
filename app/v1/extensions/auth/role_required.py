@@ -3,7 +3,7 @@
 # @File Name: role_required.py
 # @Date:   2018-08-18 22:04:29
 # @Last Modified by:   guomaoqiu@sina.com
-# @Last Modified time: 2018-08-21 18:45:17
+# @Last Modified time: 2018-08-22 20:27:05
 import logging
 import functools
 from flask import request
@@ -17,19 +17,19 @@ def permission(arg):
         def decorated(*args, **kwargs):
 
             # Get request authorization.
-            # 获取请求认证
             auth = request.authorization
             # Check if auth is none or not.
             if auth is None and 'Authorization' in request.headers:
 
                 try:
-                    # 获取auth type 跟 token.
+                    # Get auth_type and toke.
                     auth_type, token = request.headers['Authorization'].split(None, 1)
 
-                    # 反序列化 token
+                    # Deserialization token.
                     data = jwt.loads(token)
                     print (data)
 
+                    # Just print info
                     if data['admin'] == 2:
                         print ("Your role is sa .")
                     elif data['admin'] == 1:
@@ -37,9 +37,9 @@ def permission(arg):
                     else:
                         print ("Your role is user .".format(data['admin']))
 
-                    # permission_level来判断权限
+                    # Determine permissions based on permission_level
                     if data['admin'] < arg:
-                        # 如果用户不是对应的角色.
+                        # If user role does't right , return info
                         return {"message": "Permission denied, your role code is {} .".format(data['admin'])}, 403
 
                 except ValueError:
