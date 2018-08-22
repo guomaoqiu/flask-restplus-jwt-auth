@@ -7,8 +7,9 @@
 
 import logging
 from app import db
-from app.v1.conf.auth import jwt, auth, confirm_email_jwt
-from flask import g,current_app,request
+from app.v1.extensions.auth.jwt_auth import jwt, auth, confirm_email_jwt
+# from app.v1.conf.auth import jwt, auth, confirm_email_jwt
+from flask import g, request
 import hashlib
 from datetime import datetime
 from passlib.apps import custom_app_context as pwd_context
@@ -24,7 +25,7 @@ class User(db.Model):
     user_role = db.Column(db.String(length=30), default='user')
     password_hash = db.Column(db.String(128))
     is_active = db.Column(db.Boolean, default=False)
-    mobile =  db.Column(db.String(11))
+    mobile = db.Column(db.String(11))
     name = db.Column(db.String(64))
     location = db.Column(db.String(64))
     about_me = db.Column(db.Text())
@@ -54,7 +55,7 @@ class User(db.Model):
 
             # Generate admin token with flag 1.
             token = jwt.dumps({'email': self.email, 'admin': 1})
-            
+
             # Return admin flag.
             return token
 
@@ -81,70 +82,65 @@ class User(db.Model):
         try:
             # Load token.
             data = jwt.loads(token)
-            # raise 'ssssssss'
+            print data
 
         except:
             # If any error return false.
-            raise 'ssssssss'
             return False
 
         # Check if email and admin permission variables are in jwt.
         if 'email' and 'admin' in data:
-
             # Set email from jwt.
             g.user = data['email']
 
             # Set admin permission from jwt.
-            g.admin=data['admin']
-            
+            g.admin = data['admin']
 
             # Return true.
             return True
         # If does not verified, return false.
         return False
 
+    # Generates confirmation token.
+    def generate_confirmation_token(self, email, username):
 
-    # Generates confirmation token.    
-    def generate_confirmation_token(self,email,username):
-
-        return confirm_email_jwt.dumps({'email': self.email,'username':self.username})
+        return confirm_email_jwt.dumps({'email': self.email, 'username': self.username})
 
     # Check token
     @staticmethod
-    def verify_confirm_token(confirm_token,confirm_email):
+    def verify_confirm_token(confirm_token, confirm_email):
         try:
 
             data = confirm_email_jwt.loads(confirm_token)
-        
+
         # if token is exp,return None
         except Exception as why:
             logging.info("User email confirmation failed, token may have expired " + str(why))
-            #print "token exp....."
-            return None 
+            # print "token exp....."
+            return None
 
         if confirm_email == data['email']:
 
             user = User.query.filter_by(email=data['email']).first()
-            
+
             # set is_activce is 1
             user.is_active = 1
 
             db.session.add(user)
             db.session.commit()
-            
+
             return True
         else:
             return False
- 
 
-    # Get reset token    
+    # Get reset token
     def generate_reset_token(self):
-       
+
         return jwt.dumps({'reset': self.id})
 
     # Change password
     def reset_password(self, token, new_password):
-        
+
         try:
             data = jwt.loads(token)
         except:
@@ -159,9 +155,9 @@ class User(db.Model):
     def generate_email_change_token(self, new_email):
         return jwt.dumps({'change_email': self.id, 'new_email': new_email})
 
-    # 用户头像    
+    # 用户头像
     def gravatar(self, size=100, default='identicon', rating='g'):
-        
+
         if request.is_secure:
             url = 'https://secure.gravatar.com/avatar'
         else:
@@ -170,9 +166,10 @@ class User(db.Model):
             self.email.encode('utf-8')).hexdigest()
         data = '{url}/{hash}?s={size}&d={default}&r={rating}'.format(
             url=url, hash=hash, size=size, default=default, rating=rating)
-        return data       
+        return data
 
-    # Change email
+        # Change email
+
     def change_email(self, token):
         # 更改邮箱
         try:
@@ -195,37 +192,37 @@ class User(db.Model):
         # This is only for representation how you want to see user information after query.
         return "<User(id='%s', username='%s',email='%s')>" % (self.id, self.username, self.email)
 
-    # 类方法 class_method  
+    # 类方法 class_method
     @classmethod
     def return_all(cls):
         def to_json(self):
             return {
-                    'id': self.id,
-                    'email': self.email,
-                    'mobile': self.mobile,
-                    'username': self.username,
-                    'user_role': self.user_role,
-                    'is_active': self.is_active,
-                    'name': self.name,
-                    'member_since': str(self.member_since),
-                    }
-        return {'users': list(map(lambda x: to_json(x), User.query.all()))}   
-        
-    # delete all user     
+                'id': self.id,
+                'email': self.email,
+                'mobile': self.mobile,
+                'username': self.username,
+                'user_role': self.user_role,
+                'is_active': self.is_active,
+                'name': self.name,
+                'member_since': str(self.member_since),
+            }
+
+        return {'users': list(map(lambda x: to_json(x), User.query.all()))}
+
+        # delete all user
+
     @classmethod
     def delete_all(cls):
         try:
             num_rows_deleted = db.session.query(cls).delete()
             db.session.commit()
-            return {'status': 0,'message': '{} row(s) deleted'.format(num_rows_deleted)}
+            return {'status': 0, 'message': '{} row(s) deleted'.format(num_rows_deleted)}
         except:
-            return {'status': 1,'message': 'Something went wrong'}
-
+            return {'status': 1, 'message': 'Something went wrong'}
 
 
 # 过期refresh token
 class Blacklist(db.Model):
-
     # Generates default class name for table. For changing use
     # __tablename__ = 'users'
 
@@ -236,7 +233,6 @@ class Blacklist(db.Model):
     refresh_token = db.Column(db.String(length=255))
 
     def __repr__(self):
-
         # This is only for representation how you want to see refresh tokens after query.
         return "<User(id='%s', refresh_token='%s', status='invalidated.')>" % (
-                      self.id, self.refresh_token)
+            self.id, self.refresh_token)

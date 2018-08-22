@@ -6,9 +6,8 @@
 # @Last Modified time: 2018-08-21 18:45:17
 import logging
 import functools
-from app.v1 import errors as error
 from flask import request
-from app.v1.conf.auth import jwt
+from app.v1.extensions.auth.jwt_auth import jwt
 
 
 def permission(arg):
@@ -47,8 +46,7 @@ def permission(arg):
 
                 except ValueError:
                     # The Authorization header is either empty or has no token.
-                    return error.HEADER_NOT_FOUND
-                    return {"message": "Headr Not Found ."}, 404 
+                    return {"message": "Headr Not Found ."}, 404
 
                 except Exception as why:
                     # Log the error.

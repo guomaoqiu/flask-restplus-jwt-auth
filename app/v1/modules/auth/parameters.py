@@ -9,9 +9,6 @@ from app.v1 import v1_api
 from flask_restplus import fields, reqparse
 
 
-
-
-
 register_model = v1_api.model('Register', {
         'email': fields.String(required=True, description='user email address'),
         'username': fields.String(required=True, description='user username'),
@@ -27,7 +24,6 @@ rest_password_model = v1_api.model('RestPassword', {
         'email': fields.String(required=True, description='user email address'),
         'old_password': fields.String(required=True, description='user old password'),
         'new_password': fields.String(required=True, description='user new password'),
-
 })
 
 

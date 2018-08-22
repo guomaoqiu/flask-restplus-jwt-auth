@@ -3,11 +3,11 @@
 # @File Name: __init__.py
 # @Date:   2018-08-19 00:08:41
 # @Last Modified by:   guomaoqiu@sina.com
-# @Last Modified time: 2018-08-22 00:03:38
+# @Last Modified time: 2018-08-22 10:36:20
 from flask import Blueprint
 from flask_restplus import Api
 
-
+# v1 公共蓝图
 # 直接制定了templates的路径，如果不指定，则需要将app/v1下面的tempates放到app目录下
 v1_blueprint = Blueprint('v1_blueprint', __name__,
                         template_folder='templates')
@@ -25,7 +25,8 @@ v1_blueprint = Blueprint('v1_blueprint', __name__,
 v1_api = Api(v1_blueprint,
             title='DevOps FlaskREST API',
             version='1.0',
-            description='auth: guomaoqiu', 
+            description='auth: guomaoqiu\n'
+                        'since: 2018-08-01',
             contact="Author",
             contact_email="2399447849@qq.com",
             default="auth", 
@@ -34,12 +35,16 @@ v1_api = Api(v1_blueprint,
             # security='apiKey')
             )
 
+# 导入两个红图
 
-from .resources.auth import auth_ns
-from .resources.user import user_ns
-
+from .modules.auth.resources import auth_ns
+from .modules.user.resources import user_ns
+from .modules.test.resources import test_ns
 
 v1_api.add_namespace(auth_ns)
 v1_api.add_namespace(user_ns)
+v1_api.add_namespace(test_ns)
+
+
 
 
