@@ -9,10 +9,6 @@ from app.v1 import v1_api
 from flask_restplus import fields,Namespace
 
 
-
-
-
-
 register_model = v1_api.model('Register', {
         'email': fields.String(required=True, description='user email address'),
         'username': fields.String(required=True, description='user username'),
