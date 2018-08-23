@@ -3,7 +3,7 @@
 # @File Name: resources.py
 # @Date:   2018-08-18 17:00:27
 # @Last Modified by:   guomaoqiu@sina.com
-# @Last Modified time: 2018-08-22 21:29:25
+# @Last Modified time: 2018-08-24 00:08:55
 
 from flask_restplus import Resource, Namespace
 
@@ -28,6 +28,7 @@ class UserList(Resource):
     列出所有用户
     过滤某个字段，在头部加上 X-Fields: email
     """
+    @user_ns.doc('获取用户列表')
     @user_ns.marshal_list_with(get_user_fields,envelope='data')
     def get(self):
         return get_all_users()
@@ -39,7 +40,7 @@ class UserList(Resource):
 @user_ns.route('/<email>')
 class DeleterUserRequired(Resource):
     # 删除用户，只有超级管理员才有权限，请求时携带角色为sa的access_token
-    @user_ns.doc('delete user',parser=parser,)
+    @user_ns.doc('删除用户',parser=parser,)
     @auth.login_required
     @role_required.permission(2)
     def delete(self, email):
@@ -56,6 +57,6 @@ class DeleterUserRequired(Resource):
             return {"message": "user {} does not exist.".format(email)}, 404
 
     @user_ns.expect(user_put_model,validate=True,location='body')
-    @user_ns.doc('update user info')
+    @user_ns.doc('更新用户信息')
     def put(self):
         pass

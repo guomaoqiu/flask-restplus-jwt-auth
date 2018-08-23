@@ -1,13 +1,12 @@
 # -*- coding: utf-8 -*-
 # @Author: guomaoqiu
-# @File Name: parameters.py
+# @File Name: serial.py
 # @Date:   2018-08-18 21:41:37
 # @Last Modified by:   guomaoqiu@sina.com
-# @Last Modified time: 2018-08-22 21:26:34
+# @Last Modified time: 2018-08-24 00:11:29
 from app.v1 import v1_api
 
 from flask_restplus import fields, reqparse
-
 
 user_put_model = v1_api.model('DeleterUserRequired', {
         'email': fields.String(required=True, description='user email address'),

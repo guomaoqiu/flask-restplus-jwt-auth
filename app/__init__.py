@@ -3,7 +3,7 @@
 # @File Name: __init__.py
 # @Date:   2018-08-18 23:28:31
 # @Last Modified by:   guomaoqiu@sina.com
-# @Last Modified time: 2018-08-22 23:50:11
+# @Last Modified time: 2018-08-24 00:03:37
 
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
@@ -34,7 +34,7 @@ def create_app(config_name):
     app.config.SWAGGER_UI_REQUEST_DURATION = True
     # You can also specify the initial expansion state with \
     # the config.SWAGGER_UI_DOC_EXPANSION setting ('none', 'list' or 'full'):
-    app.config.SWAGGER_UI_DOC_EXPANSION = 'list'
+    app.config.SWAGGER_UI_DOC_EXPANSION = 'none'
 
 
  

@@ -3,29 +3,36 @@
 # @File Name: resources.py
 # @Date:   2018-08-19 00:08:26
 # @Last Modified by:   guomaoqiu@sina.com
-# @Last Modified time: 2018-08-23 23:06:59
+# @Last Modified time: 2018-08-24 00:07:45
 
 ###### import module
 import logging
 from flask import request
-from flask_restplus import Resource
+from flask_restplus import Resource,Namespace
 from validate_email import validate_email
 from app import db
 from app.v1.extensions.auth.jwt_auth import  auth
 from app.v1.model.user import User
 from app.v1.extensions.auth.jwt_auth import refresh_jwt
 from .serial import register_model, login_model, \
-    refresh_token_model,logout_model, rest_password_model,access_token_parser,auth_ns
+    refresh_token_model,logout_model, rest_password_model
 from app.v1.utils.user_utils import  save_new_user
 from app.v1.utils.auth_utils import  Auth
 
+auth_ns = Namespace('auth', description='auth related operations')
 
+access_token_parser = auth_ns.parser()
+access_token_parser.add_argument('Authorization',
+                    type=str,
+                    required=True,
+                    location='headers',
+                    help='Bearer Access Token')
 
 ######  API
 @auth_ns.route('/register')
 class RegisterRquired(Resource):
     """注册接口"""
-    @auth_ns.doc('user register')
+    @auth_ns.doc('用户注册')
     @auth_ns.expect(register_model, validate=True)
     def post(self):
         data = request.json
@@ -35,7 +42,7 @@ class RegisterRquired(Resource):
 @auth_ns.route('/login')
 class LoginRquired(Resource):
     """登录接口"""
-    @auth_ns.doc('user login')
+    @auth_ns.doc('用户登录')
     @auth_ns.expect(login_model, validate=True)
     def post(self):
         post_data = request.json
@@ -45,7 +52,7 @@ class LoginRquired(Resource):
 @auth_ns.route('/logout')
 class Logout(Resource):
     """登出接口"""
-    @auth_ns.doc('user logout')
+    @auth_ns.doc('用户登出')
     @auth.login_required
     @auth_ns.expect(logout_model, validate=True)
     def post(self):
@@ -57,7 +64,7 @@ class Logout(Resource):
 class RefreshTokenRquired(Resource):
     """刷新Token"""
 
-    @auth_ns.doc('refresh token')
+    @auth_ns.doc('刷新Token')
     # @auth.login_required
     @auth_ns.expect(refresh_token_model, validate=True)
     def post(self):

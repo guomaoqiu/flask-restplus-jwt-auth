@@ -27,7 +27,7 @@ while True:
     }
     print(ua.random)
     import time,random
-    randmo=random.randint(0,60)
+    randmo=random.randint(0,10)
     print(randmo)
     time.sleep(randmo)
     rsp = requests.post(url, headers=head, data=postData)

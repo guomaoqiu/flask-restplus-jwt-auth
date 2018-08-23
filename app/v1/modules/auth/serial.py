@@ -3,19 +3,12 @@
 # @File Name: serial.py
 # @Date:   2018-08-18 21:41:37
 # @Last Modified by:   guomaoqiu@sina.com
-# @Last Modified time: 2018-08-23 23:06:47
+# @Last Modified time: 2018-08-24 00:06:51
 from app.v1 import v1_api
 
 from flask_restplus import fields,Namespace
 
-auth_ns = Namespace('auth',description='authentication related operations')
 
-access_token_parser = auth_ns.parser()
-access_token_parser.add_argument('Authorization',
-                    type=str,
-                    required=True,
-                    location='headers',
-                    help='Bearer Access Token')
 
 
 
