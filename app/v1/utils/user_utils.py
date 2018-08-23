@@ -1,3 +1,9 @@
+# -*- coding: utf-8 -*-
+# @Author: guomaoqiu
+# @File Name: user_utils.py
+# @Date:   2018-08-23 11:03:15
+# @Last Modified by:   guomaoqiu@sina.com
+# @Last Modified time: 2018-08-23 22:47:46
 import datetime
 import uuid
 

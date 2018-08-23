@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
 # @Author: guomaoqiu
 # @File Name: api_doc_required.py
-# @Date:   2018-08-19 01:42:22
+# @Date:   2018-08-19 23:42:48
 # @Last Modified by:   guomaoqiu@sina.com
-# @Last Modified time: 2018-08-19 23:42:48
-#
+# @Last Modified time: 2018-08-23 22:48:40
+
 from flask import request
 from functools import wraps 
 

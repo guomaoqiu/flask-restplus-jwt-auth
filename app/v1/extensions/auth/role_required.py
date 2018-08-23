@@ -1,9 +1,10 @@
 # -*- coding: utf-8 -*-
 # @Author: guomaoqiu
 # @File Name: role_required.py
-# @Date:   2018-08-18 22:04:29
+# @Date:   2018-08-22 20:27:06
 # @Last Modified by:   guomaoqiu@sina.com
-# @Last Modified time: 2018-08-22 20:27:05
+# @Last Modified time: 2018-08-23 22:48:23
+
 import logging
 import functools
 from flask import request

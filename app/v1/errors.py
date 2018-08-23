@@ -3,7 +3,7 @@
 # @File Name: errors.py
 # @Date:   2018-08-18 17:17:43
 # @Last Modified by:   guomaoqiu@sina.com
-# @Last Modified time: 2018-08-22 01:00:39
+# @Last Modified time: 2018-08-23 23:42:34
 
 # 200 OK - [GET]：服务器成功返回用户请求的数据
 # 201 CREATED - [POST/PUT/PATCH]：用户新建或修改数据成功
@@ -21,6 +21,50 @@ from flask import make_response,jsonify
 from app.v1 import v1_blueprint
 from app.v1.extensions.auth.jwt_auth import auth
 
+error_list = {
+    20004: "用户不存在",
+    20005: "账号已被禁用",
+    20002: "账号或密码无效"
+}
+# 成功状态码 
+#SUCCESS(1, "成功"),
+
+# 参数错误：10001-19999 */
+PARAM_IS_INVALID = ({"message": "参数无效", "return_code": 10001 })
+PARAM_IS_BLANK = ({"message": "参数为空", "return_code": 10002 })
+PARAM_TYPE_BIND_ERROR = ({"message": "参数类型错误", "return_code": 10003 })
+PARAM_NOT_COMPLETE = ({"message": "参数缺失", "return_code": 10004 })
+
+# 用户错误：20001-29999*/
+USER_NOT_LOGGED_IN = ({"message": "用户未登录", "return_code": 20001 })
+USER_LOGIN_ERROR = ({"message": "账号不存在或密码错误", "return_code": 20002,})
+USER_ACCOUNT_FORBIDDEN = ({"message": "账号已被禁用", "return_code":20003})
+USER_NOT_EXIST = ({"message": "用户不存在", "return_code": 20004 })
+USER_HAS_EXISTED = ({"message": "用户已存在", "return_code": 20005})
+
+# 业务错误：30001-39999 
+#SPECIFIED_QUESTIONED_USER_NOT_EXIST(30001, "某业务出现问题"})
+
+# # 系统错误：40001-49999 */
+# SYSTEM_INNER_ERROR(40001, "系统繁忙，请稍后重试"),
+
+# # 数据错误：50001-599999 */
+# RESULE_DATA_NONE(50001, "数据未找到"),
+# DATA_IS_WRONG(50002, "数据有误"),
+# DATA_ALREADY_EXISTED(50003, "数据已存在"),
+
+# # 接口错误：60001-69999 */
+# INTERFACE_INNER_INVOKE_ERROR(60001, "内部系统接口调用异常"),
+# INTERFACE_OUTTER_INVOKE_ERROR(60002, "外部系统接口调用异常"),
+# INTERFACE_FORBID_VISIT(60003, "该接口禁止访问"),
+# INTERFACE_ADDRESS_INVALID(60004, "接口地址无效"),
+# INTERFACE_REQUEST_TIMEOUT(60005, "接口请求超时"),
+# INTERFACE_EXCEED_LOAD(60006, "接口负载过高"),
+
+# # 权限错误：70001-79999 */
+# PERMIS
+
+
 SERVER_ERROR_500 = ({"message": "An error occured."}, 500)
 NOT_FOUND_404 = ({"message": "Resource could not be found."}, 404)
 NO_INPUT_400 = ({"message": "No input data provided."}, 400)
@@ -33,15 +77,36 @@ DOES_NOT_EXIST = ({"message": "Does not exists."}, 409)
 NOT_ADMIN = ({"message": "Admin permission denied."}, 998)
 HEADER_NOT_FOUND = ({"message": "Header does not exists."}, 999)
 
-
 # 自定义错误提示
 @auth.error_handler
 def unauthorized():
     return make_response(jsonify(
-    	{	'status': 403,
-    		'message': 'Unauthorized Access'
-    	}), 403)
+        {   'status': 403,
+            'message': 'Unauthorized Access'
+        }), 403)
 
+class CustomFlaskErr(Exception):
+    status_code = 400
+    def __init__(self,status_code=None,return_code=None):
+        super().__init__(self)
+        self.return_code = return_code
+        self.status_code = status_code
+       
+    def to_dict(self):
+        rv = dict()
+        rv['message'] = error_list.get(self.return_code)
+        rv['return_code'] = self.return_code
+        rv['status_code'] = self.status_code
+        print(rv)
+        return rv
 
+@v1_blueprint.app_errorhandler(CustomFlaskErr)
+def handle_flask_error(error):
+    # response 的 json 内容为自定义错误代码和错误信息
+    response = jsonify(error.to_dict())
+    # response 返回 error 发生时定义的标准错误代码
+    response.status_code = error.status_code
+    print(response)
 
+    return response
 

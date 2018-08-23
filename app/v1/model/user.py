@@ -193,31 +193,31 @@ class User(db.Model):
 
         # This is only for representation how you want to see user information after query.
         return "<User(id='%s', username='%s',email='%s')>" % (self.id, self.username, self.email)
-
-    # 类方法 class_method
-    @classmethod
-    def return_all(cls):
-        def to_json(self):
-            return {
-                'id': self.id,
-                'email': self.email,
-                'mobile': self.mobile,
-                'username': self.username,
-                'user_role': self.user_role,
-                'is_active': self.is_active,
-                'name': self.name,
-                'member_since': str(self.member_since),
-            }
-
-        return {'users': list(map(lambda x: to_json(x), User.query.all()))}
-
-    @classmethod
-    def delete_all(cls):
-        try:
-            num_rows_deleted = db.session.query(cls).delete()
-            db.session.commit()
-            return {'status': 0, 'message': '{} row(s) deleted'.format(num_rows_deleted)}
-        except:
-            return {'status': 1, 'message': 'Something went wrong'}
-
+    #
+    # # 类方法 class_method
+    # @classmethod
+    # def return_all(cls):
+    #     def to_json(self):
+    #         return {
+    #             'id': self.id,
+    #             'email': self.email,
+    #             'mobile': self.mobile,
+    #             'username': self.username,
+    #             'user_role': self.user_role,
+    #             'is_active': self.is_active,
+    #             'name': self.name,
+    #             'member_since': str(self.member_since),
+    #         }
+    #
+    #     return {'users': list(map(lambda x: to_json(x), User.query.all()))}
+    #
+    # @classmethod
+    # def delete_all(cls):
+    #     try:
+    #         num_rows_deleted = db.session.query(cls).delete()
+    #         db.session.commit()
+    #         return {'status': 0, 'message': '{} row(s) deleted'.format(num_rows_deleted)}
+    #     except:
+    #         return {'status': 1, 'message': 'Something went wrong'}
+    #
 
