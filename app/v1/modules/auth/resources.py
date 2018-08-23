@@ -5,27 +5,21 @@
 # @Last Modified by:   guomaoqiu@sina.com
 # @Last Modified time: 2018-08-22 21:42:58
 
+###### import module
 import logging
-
 from flask import request
-from flask_restplus import Resource, Namespace
+from flask_restplus import Resource
 from validate_email import validate_email
 from app import db
-from app.v1.database.models import User
+from app.v1.model.user import User
 from app.v1.extensions.auth.jwt_auth import refresh_jwt
-from .parameters import register_model, login_model, rest_password_model
+from .serial import register_model, login_model, logout_model, rest_password_model,access_token_parser,auth_ns
 from app.v1.utils.user_utils import  save_new_user
-
-auth_ns = Namespace('auth')
-
-parser = auth_ns.parser()
-parser.add_argument('Authorization',
-                    type=str,
-                    required=True,
-                    location='headers',
-                    help='Bearer Access Token')
+from app.v1.utils.auth_utils import  Auth
 
 
+
+######  API
 @auth_ns.route('/register')
 class RegisterRquired(Resource):
     """注册接口"""
@@ -36,90 +30,25 @@ class RegisterRquired(Resource):
         return save_new_user(data=data)
 
 
-####################
-# LoginAPI
-####################
 @auth_ns.route('/login')
 class LoginRquired(Resource):
     """登录接口"""
-    @auth_ns.doc('user login')
+    @auth_ns.doc('user login',parser=access_token_parser)
     @auth_ns.expect(login_model, validate=True)
     def post(self):
-
-        try:
-            # Get user email and password.
-            email, password = request.json.get('email').strip(), request.json.get('password').strip()
-
-        except Exception as why:
-
-            # Log input strip or etc. errors.
-            logging.info("Email or password is wrong. " + str(why))
-
-            # Return invalid input error.
-            return {"message": "invalid input."}, 422
-
-        # Check if user information is none.
-        if email is None or password is None:
-            return {"message": "invalid input."}, 422
-
-        # Get user if it is existed.
-        user = User.query.filter_by(email=email).first()
-        # Check if user is not existed.
-        if user is None:
-            return {"message": "does not exist."}, 404
-
-        if not user.is_active:
-            return {'message': 'user not activated.'}, 988
-
-        # Generate an access token if the password is correct.
-        # Three roles for user, default user role is user.
-        # user：0，admin:1, sa:2
-        if user is not None and user.verify_password(password):
-
-            if user.user_role == 'user':
-
-                # Generate access token. This method takes boolean value for checking admin or normal user. Admin: 1 or 0.
-                access_token = user.generate_auth_token(0)
-
-            # If user is admin.
-            elif user.user_role == 'admin':
-
-                # Generate access token. This method takes boolean value for checking admin or normal user. Admin: 1 or 0.
-                access_token = user.generate_auth_token(1)
-
-            # If user is super admin.
-            elif user.user_role == 'sa':
-
-                # Generate access token. This method takes boolean value for checking admin or normal user. Admin: 2, 1, 0.
-                access_token = user.generate_auth_token(2)
-
-            else:
-                return {"message": "invalid input."}, 422
-
-            # Generate refresh_token based on the user emamil.
-            refresh_token = (refresh_jwt.dumps({'email': email})).decode('ascii')
-
-            # Commit session.
-            db.session.commit()
-
-            return {
-                'status': 0,
-                'message:': 'Login Success',
-                'data': {
-                    'user_id': user.id,
-                    'is_active': user.is_active,
-                    'username': user.username,
-                    'user_role': user.user_role,
-                    'access_token': access_token,
-                    'refresh_token': refresh_token
-                }
-            }
-        else:
-            # Return invalid password
-            return {"message": "invalid pasword."}, 421
+        post_data = request.json
+        return Auth.login_user(data=post_data)
 
 
-            
+@auth_ns.route('/logout')
+class LoginRquired(Resource):
+    """登录接口"""
+    @auth_ns.doc('user logout')
+    @auth_ns.expect(logout_model, validate=True)
+    def post(self):
+        post_data = request.json
+        return Auth.logout(data=post_data)
+
 
 ####################
 # ConfirmRquired

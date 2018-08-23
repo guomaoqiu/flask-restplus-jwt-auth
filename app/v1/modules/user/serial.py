@@ -22,6 +22,7 @@ get_user_fields = v1_api.model('user', {
         'is_active': fields.String(required=True, description='user is_active'),
         'mobile': fields.String(required=True, description='user mobile'),
         'about_me': fields.String(required=True, description='user info'),
+        'public_id': fields.String(description='user Identifier'),
         'member_since': fields.String(required=True, description='user register time'),
 })
 

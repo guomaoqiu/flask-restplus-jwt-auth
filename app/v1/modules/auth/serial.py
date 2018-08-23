@@ -6,7 +6,18 @@
 # @Last Modified time: 2018-08-21 18:13:39
 from app.v1 import v1_api
 
-from flask_restplus import fields, reqparse
+from flask_restplus import fields,Namespace
+
+auth_ns = Namespace('auth',description='authentication related operations')
+
+access_token_parser = auth_ns.parser()
+access_token_parser.add_argument('Authorization',
+                    type=str,
+                    required=True,
+                    location='headers',
+                    help='Bearer Access Token')
+
+
 
 
 register_model = v1_api.model('Register', {
@@ -18,6 +29,10 @@ register_model = v1_api.model('Register', {
 login_model = v1_api.model('Login', {
         'email': fields.String(required=True, description='user email address'),
         'password': fields.String(required=True, description='user password'),
+})
+
+logout_model = v1_api.model('Login', {
+        'refresh_token': fields.String(required=True, description='refresh token'),
 })
 
 rest_password_model = v1_api.model('RestPassword', {

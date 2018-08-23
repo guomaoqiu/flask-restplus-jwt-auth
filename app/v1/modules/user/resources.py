@@ -8,7 +8,7 @@
 from flask_restplus import Resource, Namespace
 
 from app import db
-from app.v1.database.models import User
+from app.v1.model.user import User
 from app.v1.extensions.auth import  role_required
 from app.v1.extensions.auth.jwt_auth import  auth
 from app.v1.utils.user_utils import get_all_users

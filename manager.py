@@ -9,7 +9,7 @@ import os
 from app import create_app, db
 from flask_script import Manager
 from flask_migrate import Migrate, MigrateCommand
-from app.v1.database.models import User,Blacklist
+from app.v1.model import user,blacklist
 
 app = create_app('default')
 manager = Manager(app)
