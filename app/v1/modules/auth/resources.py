@@ -56,9 +56,7 @@ class Logout(Resource):
     @auth_ns.doc('用户登出',parser=parser,body=logout_model)
     @auth.login_required
     def post(self):
-        print (request.args.get('sss'))
         post_data = request.json
-        print('xxxxxxxxxxx',post_data)
         return Auth.logout(data=post_data)
 
 
@@ -66,10 +64,8 @@ class Logout(Resource):
 class RefreshTokenRquired(Resource):
     """刷新Token"""
     @auth_ns.doc('刷新Token',parser=parser,body=refresh_token_model)
-    # @auth.login_required
     def post(self):
         post_data = request.json
-        #return post_data
         return Auth.refresh_token(data=post_data)
 
 
