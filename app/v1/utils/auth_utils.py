@@ -99,6 +99,7 @@ class Auth:
     def logout(data):
         print (data)
         refresh_token = request.json.get('refresh_token')
+        print(refresh_token)
 
         # Get if the refresh token is in blacklist
         ref = Blacklist.query.filter_by(refresh_token=refresh_token).first()

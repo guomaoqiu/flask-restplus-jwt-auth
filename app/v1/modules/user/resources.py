@@ -34,13 +34,10 @@ class UserList(Resource):
         return get_all_users()
 
 
-
-
-
 @user_ns.route('/<email>')
 class DeleterUserRequired(Resource):
     # 删除用户，只有超级管理员才有权限，请求时携带角色为sa的access_token
-    @user_ns.doc('删除用户',parser=parser,)
+    @user_ns.doc('删除用户',parser=parser)
     @auth.login_required
     @role_required.permission(2)
     def delete(self, email):

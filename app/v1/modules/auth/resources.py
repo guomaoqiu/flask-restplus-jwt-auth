@@ -19,14 +19,15 @@ from .serial import register_model, login_model, \
 from app.v1.utils.user_utils import  save_new_user
 from app.v1.utils.auth_utils import  Auth
 
-auth_ns = Namespace('auth', description='auth related operations')
+auth_ns = Namespace('auth', description='xxxxxxxxxxxxxx')
 
-access_token_parser = auth_ns.parser()
-access_token_parser.add_argument('Authorization',
+parser = auth_ns.parser()
+parser.add_argument('Authorization',
                     type=str,
                     required=True,
                     location='headers',
                     help='Bearer Access Token')
+
 
 ######  API
 @auth_ns.route('/register')
@@ -52,21 +53,20 @@ class LoginRquired(Resource):
 @auth_ns.route('/logout')
 class Logout(Resource):
     """登出接口"""
-    @auth_ns.doc('用户登出')
+    @auth_ns.doc('用户登出',parser=parser,body=logout_model)
     @auth.login_required
-    @auth_ns.expect(logout_model, validate=True)
     def post(self):
+        print (request.args.get('sss'))
         post_data = request.json
+        print('xxxxxxxxxxx',post_data)
         return Auth.logout(data=post_data)
 
 
 @auth_ns.route('/refresh_token')
 class RefreshTokenRquired(Resource):
     """刷新Token"""
-
-    @auth_ns.doc('刷新Token')
+    @auth_ns.doc('刷新Token',parser=parser,body=refresh_token_model)
     # @auth.login_required
-    @auth_ns.expect(refresh_token_model, validate=True)
     def post(self):
         post_data = request.json
         #return post_data
