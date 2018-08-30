@@ -14,13 +14,14 @@ from app.v1.extensions.auth.jwt_auth import  auth
 from app.v1.utils.user_utils import get_all_users
 from .serial import user_put_model,get_user_fields
 
-user_ns = Namespace('user',description='user related operations')
+user_ns = Namespace('user')
 
 parser = user_ns.parser()
 parser.add_argument('Authorization', type=str,
                     location='headers',
                     help='Bearer Access Token',
-                    required=True)
+                    required=True
+                    )
 
 @user_ns.route('/')
 class UserList(Resource):
@@ -37,7 +38,7 @@ class UserList(Resource):
 @user_ns.route('/<email>')
 class DeleterUserRequired(Resource):
     # 删除用户，只有超级管理员才有权限，请求时携带角色为sa的access_token
-    @user_ns.doc('删除用户',parser=parser)
+    @user_ns.doc('删除用户',parser=parser,description='用户删除，需要超级管理员权限')
     @auth.login_required
     @role_required.permission(2)
     def delete(self, email):

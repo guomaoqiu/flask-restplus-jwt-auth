@@ -19,7 +19,7 @@ from .serial import register_model, login_model, \
 from app.v1.utils.user_utils import  save_new_user
 from app.v1.utils.auth_utils import  Auth
 
-auth_ns = Namespace('auth', description='xxxxxxxxxxxxxx')
+auth_ns = Namespace('auth')
 
 parser = auth_ns.parser()
 parser.add_argument('Authorization',
