@@ -12,7 +12,6 @@ from flask_restplus import Api
 v1_blueprint = Blueprint('v1_blueprint', __name__,
                         template_folder='templates')
 
-
 # Bases Authorization
 # authorizations = {
 #     'apiKey': {

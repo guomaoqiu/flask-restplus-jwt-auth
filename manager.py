@@ -26,5 +26,5 @@ def run():
 
 
 if __name__ == '__main__':
-    #app.run(use_reloader=True,debug=True)
-    manager.run()
+    app.run(use_reloader=True,debug=True)
+    #manager.run()

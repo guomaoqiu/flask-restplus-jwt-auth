@@ -29,7 +29,9 @@ class UserList(Resource):
     列出所有用户
     过滤某个字段，在头部加上 X-Fields: email
     """
-    @user_ns.doc('获取用户列表')
+    @user_ns.doc('获取用户列表',parser=parser)
+    @auth.login_required
+    @role_required.permission(2)
     @user_ns.marshal_list_with(get_user_fields,envelope='data')
     def get(self):
         return get_all_users()
@@ -58,3 +60,4 @@ class DeleterUserRequired(Resource):
     @user_ns.doc('更新用户信息')
     def put(self):
         pass
+

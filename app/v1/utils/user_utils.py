@@ -6,13 +6,14 @@
 # @Last Modified time: 2018-08-23 22:47:46
 import datetime
 import uuid
-
+from flask import url_for
 from app import db
 from app.v1.model.user import User
 import hashlib
 from datetime import datetime
 from passlib.apps import custom_app_context as pwd_context
 from validate_email import validate_email
+from app.v1.mail import email
 
 def save_new_user(data):
     user = User.query.filter_by(email=data['email']).first()

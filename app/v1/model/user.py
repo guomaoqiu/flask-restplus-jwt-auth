@@ -103,10 +103,10 @@ class User(db.Model):
         # If does not verified, return false.
         return False
 
-    # Generates confirmation token.
-    #def generate_confirmation_token(self, email, username):
+    #Generates confirmation token.
+    def generate_confirmation_token(self, email, username):
 
-    #    return confirm_email_jwt.dumps({'email': self.email, 'username': self.username})
+       return confirm_email_jwt.dumps({'email': self.email, 'username': self.username}).decode('ascii')
 
     # Check token
     @staticmethod
@@ -140,6 +140,7 @@ class User(db.Model):
 
         return jwt.dumps({'reset': self.id}).decode('ascii')
 
+
     # Change password
     def reset_password(self, token, new_password):
 
@@ -170,8 +171,7 @@ class User(db.Model):
             url=url, hash=hash, size=size, default=default, rating=rating)
         return data
 
-        # Change email
-
+    # Change email
     def change_email(self, token):
         # 更改邮箱
         try:
