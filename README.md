@@ -20,3 +20,4 @@ http://127.0.0.1:5000/api/v1
 ```
 ![](https://raw.githubusercontent.com/guomaoqiu/flask-restplus-jwt-auth/master/screenshots/331536041971_.pic_hd.jpg)
 
+其他功能逐步完善ing
