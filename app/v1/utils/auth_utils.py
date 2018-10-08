@@ -2,8 +2,8 @@
 # @Author: guomaoqiu
 # @File Name: auth_utils.py
 # @Date:   2018-08-23 22:47:18
-# @Last Modified by:   guomaoqiu@sina.com
-# @Last Modified time: 2018-08-23 23:43:13
+# @Last Modified by:   Green
+# @Last Modified time: 2018-10-08 14:53:04
 from app import db
 from flask import request
 
@@ -12,6 +12,7 @@ from app.v1.model.blacklist import Blacklist
 from .user_utils import  save_changes
 from app.v1.extensions.auth.jwt_auth import refresh_jwt
 from app.v1.errors import CustomFlaskErr as error
+from validate_email import validate_email
 
 
 class Auth:
@@ -26,7 +27,10 @@ class Auth:
             # Log input strip or etc. errors.
             # logging.info("Email or password is wrong. " + str(why))
             # Return invalid input error.
-            return {"message": "invalid input."}, 422
+            return error(status_code=422,return_code=20002)
+
+        if not validate_email(data['email'],verify=True,check_mx=True):
+            raise error(status_code=500,return_code=20006)    
 
         # Check if user information is none.
         if email is None or password is None:
@@ -78,6 +82,8 @@ class Auth:
             # Commit session.
             db.session.commit()
 
+            # raise error(status_code=200, return_code=1,message="fdsa")
+
             return {
                 'status': 0,
                 'message:': 'Login Success',
@@ -92,7 +98,7 @@ class Auth:
             }
         else:
             # Return invalid password
-            return {"message": "invalid pasword."}, 421
+            raise error(status_code=421,return_code=20003)
 
 
     @staticmethod

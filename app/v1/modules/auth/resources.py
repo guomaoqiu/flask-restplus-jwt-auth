@@ -2,8 +2,8 @@
 # @Author: guomaoqiu
 # @File Name: resources.py
 # @Date:   2018-08-19 00:08:26
-# @Last Modified by:   guomaoqiu@sina.com
-# @Last Modified time: 2018-08-31 10:28:53
+# @Last Modified by:   Green
+# @Last Modified time: 2018-10-08 14:26:53
 
 ###### import module
 import logging
@@ -69,7 +69,7 @@ class RefreshTokenRequired(Resource):
 class ConfirmRquired(Resource):
     """登录接口"""
 
-    @auth_ns.doc('user email confirm')
+    @auth_ns.doc('用户邮件确认')
     # @auth_ns.expect(login_model, validate=True)
     @auth_ns.param('email', required=True)
     def get(self, confirm_token):

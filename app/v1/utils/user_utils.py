@@ -2,8 +2,8 @@
 # @Author: guomaoqiu
 # @File Name: user_utils.py
 # @Date:   2018-08-23 11:03:15
-# @Last Modified by:   guomaoqiu@sina.com
-# @Last Modified time: 2018-08-23 22:47:46
+# @Last Modified by:   Green
+# @Last Modified time: 2018-10-08 15:05:15
 import datetime
 import uuid
 from flask import url_for
@@ -14,12 +14,18 @@ from datetime import datetime
 from passlib.apps import custom_app_context as pwd_context
 from validate_email import validate_email
 from app.v1.mail import email
+from app.v1.errors import CustomFlaskErr as error
+
 
 def save_new_user(data):
     user = User.query.filter_by(email=data['email']).first()
-
+    print (data['username'])
     if not validate_email(data['email'],verify=True,check_mx=True):
-       return {'message':'invalid email'}
+        raise error(status_code=500,return_code=20006)    
+    
+    
+    if not data['password']  or  not data['username']:
+        raise error(status_code=422,return_code=20007)    
 
     if not user :
         user = User(
@@ -43,11 +49,7 @@ def save_new_user(data):
         }
         return response_object,200
     else:
-        response_object = {
-            'status': 'fail',
-            'message': 'User already exists. Please Log in.',
-        }
-        return response_object, 409
+        raise error(status_code=409,return_code=20004)
 
 
 def get_all_users():

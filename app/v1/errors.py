@@ -2,8 +2,8 @@
 # @Author: guomaoqiu
 # @File Name: errors.py
 # @Date:   2018-08-18 17:17:43
-# @Last Modified by:   guomaoqiu@sina.com
-# @Last Modified time: 2018-08-23 23:42:34
+# @Last Modified by:   Green
+# @Last Modified time: 2018-10-08 15:03:25
 
 # 200 OK - [GET]：服务器成功返回用户请求的数据
 # 201 CREATED - [POST/PUT/PATCH]：用户新建或修改数据成功
@@ -22,12 +22,25 @@ from app.v1 import v1_blueprint
 from app.v1.extensions.auth.jwt_auth import auth
 
 error_list = {
-    20004: "用户不存在",
-    20005: "账号已被禁用",
-    20002: "账号或密码无效"
+    # 成功状态码 
+    0: "成功",
+
+    # 用户错误：
+    20001: "用户不存在",
+    20002: "账号已被禁用",
+    20003: "密码无效",
+    20004: "用户已存在",
+    20005: "用户未登录",
+    20006: "邮箱地址无效",
+    20007: "用户名、密码不能为空",
+
+    # 参数错误：
+    10001: "参数为空",
+    10002: "参数无效",
+    10003: "参数类型错误",
+    10004: "参数缺失",
 }
-# 成功状态码 
-#SUCCESS(1, "成功"),
+
 
 # 参数错误：10001-19999 */
 PARAM_IS_INVALID = ({"message": "参数无效", "return_code": 10001 })
@@ -39,7 +52,7 @@ PARAM_NOT_COMPLETE = ({"message": "参数缺失", "return_code": 10004 })
 USER_NOT_LOGGED_IN = ({"message": "用户未登录", "return_code": 20001 })
 USER_LOGIN_ERROR = ({"message": "账号不存在或密码错误", "return_code": 20002,})
 USER_ACCOUNT_FORBIDDEN = ({"message": "账号已被禁用", "return_code":20003})
-USER_NOT_EXIST = ({"message": "用户不存在", "return_code": 20004 })
+USER_NOT_EXIST = ({"message": "用户不存在xxxxxxxxxxx", "return_code": 20004 })
 USER_HAS_EXISTED = ({"message": "用户已存在", "return_code": 20005})
 
 # 业务错误：30001-39999 
