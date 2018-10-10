@@ -3,7 +3,7 @@
 # @File Name: errors.py
 # @Date:   2018-08-18 17:17:43
 # @Last Modified by:   Green
-# @Last Modified time: 2018-10-08 15:03:25
+# @Last Modified time: 2018-10-10 11:32:20
 
 # 200 OK - [GET]：服务器成功返回用户请求的数据
 # 201 CREATED - [POST/PUT/PATCH]：用户新建或修改数据成功
@@ -95,8 +95,10 @@ HEADER_NOT_FOUND = ({"message": "Header does not exists."}, 999)
 def unauthorized():
     return make_response(jsonify(
         {   'status': 403,
-            'message': 'Unauthorized Access'
+            'message': '未授权访问'
         }), 403)
+
+
 
 class CustomFlaskErr(Exception):
     status_code = 400

@@ -2,8 +2,8 @@
 # @Author: guomaoqiu
 # @File Name: role_required.py
 # @Date:   2018-08-22 20:27:06
-# @Last Modified by:   guomaoqiu@sina.com
-# @Last Modified time: 2018-08-23 22:48:23
+# @Last Modified by:   Green
+# @Last Modified time: 2018-10-10 11:39:56
 
 import logging
 import functools
@@ -28,7 +28,7 @@ def permission(arg):
 
                     # Deserialization token.
                     data = jwt.loads(token)
-                    print (data)
+                    print (auth_type,token)
 
                     # Just print info
                     if data['admin'] == 2:
@@ -36,7 +36,7 @@ def permission(arg):
                     elif data['admin'] == 1:
                         print ("Your role is admin .")
                     else:
-                        print ("Your role is user .".format(data['admin']))
+                        print ("Your role is user {}.".format(data['admin']))
 
                     # Determine permissions based on permission_level
                     if data['admin'] < arg:
@@ -48,8 +48,12 @@ def permission(arg):
                     return {"message": "Headr Not Found ."}, 404
 
                 except Exception as why:
+
+                    pass
                     # Log the error.
-                    logging.error(why)
+                    print('xxxxxxxxxx')
+
+                    # logging.error(why)
 
                     # If it does not generated return false.
                     return {"message": "Invalid input ."}, 422

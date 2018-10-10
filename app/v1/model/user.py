@@ -8,7 +8,7 @@
 import logging
 from app import db
 from app.v1.extensions.auth.jwt_auth import jwt, auth, confirm_email_jwt
-from flask import g, request
+from flask import g, request, jsonify
 import hashlib
 from datetime import datetime
 from passlib.apps import custom_app_context as pwd_context
@@ -55,8 +55,9 @@ class User(db.Model):
             # Generate admin token with flag 1.
             token = jwt.dumps({'email': self.email, 'admin': 1}).decode('ascii')
 
+
             # Return admin flag.
-            return token
+            return
 
             # Check if admin.
         elif permission_level == 2:
@@ -71,7 +72,11 @@ class User(db.Model):
         # python 2 dumps过后是str, 而在python3 中dumps的结果为bytes,
         # 则需要将bytes转为字符串，即可 decode('ascii)
         # 否则会报错: "TypeError: Object of type 'bytes' is not JSON serializable"
-        return jwt.dumps({'email': self.email, 'admin': 0}).decode('ascii')
+
+        #print(jwt.make_header(header_fields={'token': jwt.dumps({'email': self.email, 'admin': 0}).decode('ascii')}))
+        token = jwt.dumps({'email': self.email, 'admin': 0}).decode('ascii')
+        #jwt.make_header(header_fields=token)
+        return token
 
 
     # Generates a new access token from refresh token.
@@ -86,7 +91,8 @@ class User(db.Model):
             # Load token.
             data = jwt.loads(token)
 
-        except:
+        except Exception as why:
+            logging.error(why)
             # If any error return false.
             return False
 
@@ -101,6 +107,7 @@ class User(db.Model):
             # Return true.
             return True
         # If does not verified, return false.
+
         return False
 
     #Generates confirmation token.
