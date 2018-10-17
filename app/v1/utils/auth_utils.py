@@ -11,8 +11,9 @@ from app.v1.model.user import User
 from app.v1.model.blacklist import Blacklist
 from .user_utils import  save_changes
 from app.v1.extensions.auth.jwt_auth import refresh_jwt
-from app.v1.errors import CustomFlaskErr as error
+from app.v1.errors import CustomFlaskErr as notice
 from validate_email import validate_email
+
 
 
 class Auth:
@@ -27,14 +28,14 @@ class Auth:
             # Log input strip or etc. errors.
             # logging.info("Email or password is wrong. " + str(why))
             # Return invalid input error.
-            return error(status_code=422,return_code=20002)
+            return notice(status_code=422,return_code=20002)
 
         #if not validate_email(data['email'],verify=True,check_mx=True):
          #   raise error(status_code=500,return_code=20006)    
 
         # Check if user information is none.
         if email is None or password is None:
-            raise error(status_code=422,return_code=20002)
+            raise notice(status_code=422,return_code=20002)
 
         # Get user if it is existed.
         user = User.query.filter_by(email=email).first()
@@ -42,10 +43,10 @@ class Auth:
         # Check if user is not existed.
         if user is None:
 
-            raise error(status_code=404,return_code=20004)
+            raise notice(status_code=404,return_code=20004)
 
         if not user.is_active:
-            raise error(status_code=403,return_code=20008)
+            raise notice(status_code=403,return_code=20008)
 
         # Generate an access token if the password is correct.
         # Three roles for user, default user role is user.
@@ -98,7 +99,7 @@ class Auth:
             }
         else:
             # Return invalid password
-            raise error(status_code=421,return_code=20003)
+            raise notice(status_code=421,return_code=20003)
 
 
     @staticmethod

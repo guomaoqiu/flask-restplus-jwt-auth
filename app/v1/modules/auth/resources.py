@@ -18,6 +18,9 @@ from .serial import register_model, login_model, \
     refresh_token_model,logout_model, rest_password_model
 from app.v1.utils.user_utils import  save_new_user
 from app.v1.utils.auth_utils import  Auth
+from app.v1.errors import CustomFlaskErr as notice
+
+
 
 auth_ns = Namespace('auth')
 
@@ -84,12 +87,11 @@ class ConfirmRquired(Resource):
         # use staticmethod verify confirm toke
         if User.verify_confirm_token(confirm_token, confirm_email):
 
-            return {'message': 'User is active now'}, 200
+            raise notice(status_code=200, return_code=20000,action_status=True)
 
         else:
 
-            return {'message': 'User email confirmation failed, token may have expired, or email invalid , '
-                               'Please contact Admin'}, 202
+            raise notice(status_code=202,return_code=20009, action_status=False)
 
 
 ####################

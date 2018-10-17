@@ -26,6 +26,7 @@ error_list = {
     0: "成功",
 
     # 用户错误：
+    #20000: "账户已激活成功",
     20001: "用户不存在",
     20002: "账号已被禁用",
     20003: "密码无效",
@@ -34,6 +35,11 @@ error_list = {
     20006: "邮箱地址无效",
     20007: "用户名、密码不能为空",
     20008: "账户未激活",
+    20009: "用户激活失败, token失效或邮箱不正确，请联系管理员.",
+
+    # 用户成功：
+    30001: "账户注册成功，请点击激活链接，进行账户激活.",
+    30002: "账户已激活成功",
 
     # 参数错误：
     10001: "参数为空",
@@ -103,13 +109,20 @@ def unauthorized():
 
 class CustomFlaskErr(Exception):
     status_code = 400
-    def __init__(self,status_code=None,return_code=None):
+    def __init__(self,status_code=None,return_code=None,action_status=None,playbook=None):
         super().__init__(self)
         self.return_code = return_code
         self.status_code = status_code
+        self.action_status = action_status
+        self.playbook = playbook
        
     def to_dict(self):
         rv = dict()
+        if self.playbook != None:
+            rv['data'] = self.playbook
+        else:
+            print (self.playbook)
+        rv['action_status'] = self.action_status
         rv['message'] = error_list.get(self.return_code)
         rv['return_code'] = self.return_code
         rv['status_code'] = self.status_code
