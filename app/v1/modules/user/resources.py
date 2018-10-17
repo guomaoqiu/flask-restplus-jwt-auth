@@ -2,8 +2,8 @@
 # @Author: guomaoqiu
 # @File Name: resources.py
 # @Date:   2018-08-18 17:00:27
-# @Last Modified by:   guomaoqiu@sina.com
-# @Last Modified time: 2018-08-24 00:08:55
+# @Last Modified by:   Green
+# @Last Modified time: 2018-10-15 15:45:39
 
 from flask_restplus import Resource, Namespace
 
@@ -56,8 +56,8 @@ class DeleterUserRequired(Resource):
         else:
             return {"message": "user {} does not exist.".format(email)}, 404
 
-    @user_ns.expect(user_put_model,validate=True,location='body')
-    @user_ns.doc('更新用户信息')
-    def put(self):
-        pass
+    #@user_ns.expect(user_put_model,validate=True,location='body')
+    #@user_ns.doc('更新用户信息')
+    #def put(self):
+    #    pass
 

@@ -3,7 +3,7 @@
 # @File Name: auth_utils.py
 # @Date:   2018-08-23 22:47:18
 # @Last Modified by:   Green
-# @Last Modified time: 2018-10-08 14:53:04
+# @Last Modified time: 2018-10-15 16:32:23
 from app import db
 from flask import request
 
@@ -29,8 +29,8 @@ class Auth:
             # Return invalid input error.
             return error(status_code=422,return_code=20002)
 
-        if not validate_email(data['email'],verify=True,check_mx=True):
-            raise error(status_code=500,return_code=20006)    
+        #if not validate_email(data['email'],verify=True,check_mx=True):
+         #   raise error(status_code=500,return_code=20006)    
 
         # Check if user information is none.
         if email is None or password is None:
@@ -45,7 +45,7 @@ class Auth:
             raise error(status_code=404,return_code=20004)
 
         if not user.is_active:
-            return {'message': 'user not activated.'}, 988
+            raise error(status_code=403,return_code=20008)
 
         # Generate an access token if the password is correct.
         # Three roles for user, default user role is user.

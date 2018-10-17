@@ -20,6 +20,7 @@ def create_app(config_name):
 
     db.init_app(app)
     db.create_all()
+    db.create_all()
 
     # 注册到Flask 核心对象
     from .v1 import v1_blueprint

@@ -3,7 +3,7 @@
 # @File Name: errors.py
 # @Date:   2018-08-18 17:17:43
 # @Last Modified by:   Green
-# @Last Modified time: 2018-10-10 11:32:20
+# @Last Modified time: 2018-10-15 16:33:03
 
 # 200 OK - [GET]：服务器成功返回用户请求的数据
 # 201 CREATED - [POST/PUT/PATCH]：用户新建或修改数据成功
@@ -33,6 +33,7 @@ error_list = {
     20005: "用户未登录",
     20006: "邮箱地址无效",
     20007: "用户名、密码不能为空",
+    20008: "账户未激活",
 
     # 参数错误：
     10001: "参数为空",

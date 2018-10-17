@@ -13,7 +13,7 @@ Flask==0.11.1
 flask-apidoc==1.1.2
 Flask-HTTPAuth==3.1.2
 Flask-Login==0.4.1
-Flask-Mail==0.9.1
+Flask-Mail==0.9.0
 flask-marshmallow==0.9.0
 Flask-Migrate==2.2.1
 Flask-RESTful==0.3.5

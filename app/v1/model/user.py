@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 # @Author: guomaoqiu
-# @File Name: models.py
+# @File Name: user.py
 # @Date:   2018-08-18 18:03:19
-# @Last Modified by:   guomaoqiu@sina.com
-# @Last Modified time: 2018-08-21 23:11:37
+# @Last Modified by:   Green
+# @Last Modified time: 2018-10-15 15:32:16
 
 import logging
 from app import db
@@ -57,7 +57,7 @@ class User(db.Model):
 
 
             # Return admin flag.
-            return
+            return token
 
             # Check if admin.
         elif permission_level == 2:
@@ -121,24 +121,23 @@ class User(db.Model):
         try:
 
             data = confirm_email_jwt.loads(confirm_token)
+            print (('s',confirm_email))
+            # if token is exp,return None
+            if confirm_email == data['email']:
+                user = User.query.filter_by(email=data['email']).first()
 
-        # if token is exp,return None
+                # set is_activce is 1
+                user.is_active = 1
+                #print(user)
+                db.session.add(user)
+                db.session.commit()
+
+                return True
+
         except Exception as why:
             logging.info("User email confirmation failed, token may have expired " + str(why))
             print ("token exp.....")
             return None
-
-        if confirm_email == data['email']:
-
-            user = User.query.filter_by(email=data['email']).first()
-
-            # set is_activce is 1
-            user.is_active = 1
-
-            db.session.add(user)
-            db.session.commit()
-
-            return True
         else:
             return False
 

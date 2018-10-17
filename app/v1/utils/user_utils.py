@@ -3,19 +3,15 @@
 # @File Name: user_utils.py
 # @Date:   2018-08-23 11:03:15
 # @Last Modified by:   Green
-# @Last Modified time: 2018-10-08 15:05:15
+# @Last Modified time: 2018-10-16 15:42:46
 import datetime
 import uuid
 from flask import url_for
 from app import db
 from app.v1.model.user import User
-import hashlib
-from datetime import datetime
-from passlib.apps import custom_app_context as pwd_context
 from validate_email import validate_email
-from app.v1.mail import email
+from app.v1.mail.email import send_email
 from app.v1.errors import CustomFlaskErr as error
-
 
 def save_new_user(data):
     user = User.query.filter_by(email=data['email']).first()
@@ -39,12 +35,21 @@ def save_new_user(data):
 
         save_changes(user)
 
+        email_confirm_token =  (user.generate_confirmation_token(data['email'],data['username']))
+
+        confirm_url = (url_for('v1_blueprint.confirm',confirm_token=email_confirm_token,_external=True)) + '?email=' + data['email']
+
+        # send confirm email to register user.
+        send_email(to=data['email'], subject='active',template='email_tpl/confirm',
+                         confirm_url=confirm_url,user=data['username'],)
+
         response_object={  'status': 0,
             'message': "Registration is successful, please check the email to confirm.",
             'data': {
                 'user_id': user.id,
                 'username': data['username'],
-                'create_time': str(user.member_since)
+                'create_time': str(user.member_since),
+                'confirm_url': str(confirm_url),
             }
         }
         return response_object,200

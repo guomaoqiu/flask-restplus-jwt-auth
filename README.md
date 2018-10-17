@@ -21,3 +21,13 @@ http://127.0.0.1:5000/api/v1
 ![](https://raw.githubusercontent.com/guomaoqiu/flask-restplus-jwt-auth/master/screenshots/331536041971_.pic_hd.jpg)
 
 其他功能逐步完善ing
+
+认证:
+  - 注册(邮件确认激活)
+  - 登录
+  - 退出
+  - 刷新 Access Token
+用户:
+  - 获取用户信息
+  - 删除用户
+  

@@ -2,8 +2,8 @@
 # @Author: guomaoqiu
 # @File Name: config.py
 # @Date:   2018-08-18 16:55:23
-# @Last Modified by:   guomaoqiu@sina.com
-# @Last Modified time: 2018-08-21 15:59:13
+# @Last Modified by:   Green
+# @Last Modified time: 2018-10-15 17:44:33
 
 import os
 
@@ -17,9 +17,10 @@ class Config:
     # send mail
     MAIL_SERVER = 'smtp.qq.com'
     MAIL_PORT = 465
+    MAIL_ASCII_ATTACHMENTS = False
     MAIL_USE_SSL = True
     MAIL_USERNAME = '2399447849'
-    MAIL_PASSWORD =  ''
+    MAIL_PASSWORD =  'guomaoqiu.150019'
     FLASKY_MAIL_SUBJECT_PREFIX = u'DevOps Flask RestPlus API'
     FLASKY_MAIL_SENDER = '2399447849@qq.com'
     FLASKY_ADMIN = '2399447849@qq.com'

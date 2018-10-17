@@ -10,10 +10,8 @@ import functools
 from flask import request
 from app.v1.extensions.auth.jwt_auth import jwt
 
-
 def permission(arg):
     def check_permissions(f):
-
         @functools.wraps(f)
         def decorated(*args, **kwargs):
 
@@ -50,8 +48,6 @@ def permission(arg):
                 except Exception as why:
 
                     pass
-                    # Log the error.
-                    print('xxxxxxxxxx')
 
                     # logging.error(why)
 

@@ -3,7 +3,7 @@
 # @File Name: resources.py
 # @Date:   2018-08-19 00:08:26
 # @Last Modified by:   Green
-# @Last Modified time: 2018-10-08 14:26:53
+# @Last Modified time: 2018-10-15 16:37:37
 
 ###### import module
 import logging
@@ -78,9 +78,9 @@ class ConfirmRquired(Resource):
         confirm_email = request.args.get('email')
 
         # Check confirm email
-        if  validate_email(confirm_email, check_mx=True, verify=True):
+        #if  validate_email(confirm_email, check_mx=True, verify=True):
 
-            return {"message": "email invalid input."}, 423
+        #    return {"message": "email invalid input."}, 423
         # use staticmethod verify confirm toke
         if User.verify_confirm_token(confirm_token, confirm_email):
 
@@ -88,7 +88,8 @@ class ConfirmRquired(Resource):
 
         else:
 
-            return {'message': 'User email confirmation failed, token may have expired, or email invalid'}, 202
+            return {'message': 'User email confirmation failed, token may have expired, or email invalid , '
+                               'Please contact Admin'}, 202
 
 
 ####################
