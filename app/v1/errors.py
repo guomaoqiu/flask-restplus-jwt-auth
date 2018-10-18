@@ -62,7 +62,7 @@ USER_ACCOUNT_FORBIDDEN = ({"message": "账号已被禁用", "return_code":20003}
 USER_NOT_EXIST = ({"message": "用户不存在xxxxxxxxxxx", "return_code": 20004 })
 USER_HAS_EXISTED = ({"message": "用户已存在", "return_code": 20005})
 
-# 业务错误：30001-39999 
+# 业务错误：30001-39999
 #SPECIFIED_QUESTIONED_USER_NOT_EXIST(30001, "某业务出现问题"})
 
 # # 系统错误：40001-49999 */

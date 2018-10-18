@@ -29,7 +29,7 @@ v1_api = Api(v1_blueprint,
             contact="Author",
             contact_email="2399447849@qq.com",
             default="auth", 
-            default_label=None
+            default_label=''
             # authorizations=authorizations,
             # security='apiKey')
             )

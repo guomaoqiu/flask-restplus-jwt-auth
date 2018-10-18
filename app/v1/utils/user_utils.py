@@ -33,15 +33,15 @@ def save_new_user(data):
         # Hash new user password
         user.hash_password(data['password'])
 
-        # save_changes(user)
+        save_changes(user)
 
         email_confirm_token =  (user.generate_confirmation_token(data['email'],data['username']))
 
         confirm_url = (url_for('v1_blueprint.confirm',confirm_token=email_confirm_token,_external=True)) + '?email=' + data['email']
 
         # send confirm email to register user.
-        #send_email(to=data['email'], subject='active',template='email_tpl/confirm',
-        #                 confirm_url=confirm_url,user=data['username'],)
+        send_email(to=data['email'], subject='active',template='email_tpl/confirm',
+                         confirm_url=confirm_url,user=data['username'],)
 
         raise notice(status_code=200,return_code=30001,action_status=True,playbook={
                     'username': data['username'],

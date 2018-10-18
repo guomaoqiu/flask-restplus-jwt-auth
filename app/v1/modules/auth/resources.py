@@ -87,7 +87,7 @@ class ConfirmRquired(Resource):
         # use staticmethod verify confirm toke
         if User.verify_confirm_token(confirm_token, confirm_email):
 
-            raise notice(status_code=200, return_code=20000,action_status=True)
+            raise notice(status_code=200, return_code=30002,action_status=True)
 
         else:
 
