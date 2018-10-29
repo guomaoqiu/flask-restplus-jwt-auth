@@ -20,7 +20,7 @@ class Config:
     MAIL_ASCII_ATTACHMENTS = False
     MAIL_USE_SSL = True
     MAIL_USERNAME = '2399447849'
-    MAIL_PASSWORD =  'guomaoqiu.150019'
+    MAIL_PASSWORD =  ''
     FLASKY_MAIL_SUBJECT_PREFIX = u'DevOps Flask RestPlus API'
     FLASKY_MAIL_SENDER = '2399447849@qq.com'
     FLASKY_ADMIN = '2399447849@qq.com'
