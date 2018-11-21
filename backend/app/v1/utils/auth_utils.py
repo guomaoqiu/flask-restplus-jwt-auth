@@ -3,7 +3,7 @@
 # @File Name: auth_utils.py
 # @Date:   2018-08-23 22:47:18
 # @Last Modified by:   guomaoqiu
-# @Last Modified time: 2018-11-21 22:40:20
+# @Last Modified time: 2018-11-21 23:38:44
 from app import db
 from flask import request
 
@@ -93,16 +93,23 @@ class Auth:
             #         'refresh_token': refresh_token
             #     })
             return {
-                    'status':200,
-                    'message':"success",
-                    'user_id': user.id,
-                    'roles': 'amdin',
-                    'is_active': user.is_active,
-                    'username': user.username,
-                    'user_role': user.user_role,
-                    'access_token': access_token,
-                    'refresh_token': refresh_token
-                }
+                "roles": ['admin'],
+                "token": access_token,
+                "introduction": '我是超级管理员',
+                "avatar": 'https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif',
+                "name": 'Super Admin'
+            }
+            # return {
+            #         'status':200,
+            #         'message':"success",
+            #         'user_id': user.id,
+            #         'roles': 'editor',
+            #         'is_active': user.is_active,
+            #         'username': user.username,
+            #         'user_role': user.user_role,
+            #         'access_token': access_token,
+            #         'refresh_token': refresh_token
+            #     }
         else:
             # Return invalid password
             raise notice(status_code=421,return_code=20003,action_status=False)
