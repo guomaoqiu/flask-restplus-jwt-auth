@@ -3,7 +3,7 @@
 # @File Name: auth_utils.py
 # @Date:   2018-08-23 22:47:18
 # @Last Modified by:   guomaoqiu
-# @Last Modified time: 2018-11-21 17:57:19
+# @Last Modified time: 2018-11-21 18:51:37
 from app import db
 from flask import request
 
@@ -96,6 +96,7 @@ class Auth:
                     'status':200,
                     'message':"success",
                     'user_id': user.id,
+                    'roles': ['admin'],
                     'is_active': user.is_active,
                     'username': user.username,
                     'user_role': user.user_role,
