@@ -2,8 +2,8 @@
 # @Author: guomaoqiu
 # @File Name: __init__.py
 # @Date:   2018-08-18 23:28:31
-# @Last Modified by:   guomaoqiu@sina.com
-# @Last Modified time: 2018-08-24 00:03:37
+# @Last Modified by:   guomaoqiu
+# @Last Modified time: 2018-11-20 18:35:32
 
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
@@ -15,7 +15,7 @@ db = SQLAlchemy()
 def create_app(config_name):
 
     app = Flask(__name__)
-    cors = CORS(app, resources={r"/api/*": {"origins": "*"}})
+    cors = CORS(app, resources={r"*": {"origins": "*"}})
 
     app.config.from_object(config[config_name])
     app.app_context().push()

@@ -8,6 +8,7 @@ const service = axios.create({
   baseURL: process.env.BASE_API, // api 的 base_url
   timeout: 5000 // request timeout
 })
+console.log(process.env.BASE_API)
 
 // request interceptor
 service.interceptors.request.use(
@@ -21,7 +22,7 @@ service.interceptors.request.use(
   },
   error => {
     // Do something with request error
-    console.log(error) // for debug
+    // console.log(error) // for debug
     Promise.reject(error)
   }
 )

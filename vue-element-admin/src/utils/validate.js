@@ -1,14 +1,15 @@
 /**
  * Created by jiachenpan on 16/11/18.
-*/
-export function isvalidEmail(str) {
-  const re = /^[a-z0-9](?:[-_.+]?[a-z0-9]+)*@qq\.com$/i
-  return re.test(str.trim())
-}
+ */
 
 export function isvalidUsername(str) {
   const valid_map = ['admin', 'editor']
   return valid_map.indexOf(str.trim()) >= 0
+}
+
+export function isvalidEmail(str) {
+  const re = /^[a-z0-9](?:[-_.+]?[a-z0-9]+)*@qq\.com$/i
+  return re.test(str.trim())
 }
 
 /* 合法uri*/

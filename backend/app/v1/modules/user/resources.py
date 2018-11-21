@@ -2,9 +2,9 @@
 # @Author: guomaoqiu
 # @File Name: resources.py
 # @Date:   2018-08-18 17:00:27
-# @Last Modified by:   Green
-# @Last Modified time: 2018-10-15 15:45:39
-
+# @Last Modified by:   guomaoqiu
+# @Last Modified time: 2018-11-21 15:42:15
+from flask import request
 from flask_restplus import Resource, Namespace
 
 from app import db
@@ -61,3 +61,16 @@ class DeleterUserRequired(Resource):
     #def put(self):
     #    pass
 
+@user_ns.route('/info')
+class GetUserInfo(Resource):
+    """
+    列出所有用户
+    过滤某个字段，在头部加上 X-Fields: email
+    """
+    # @user_ns.doc('获取用户列表',parser=parser)
+    # @auth.login_required
+    # @role_required.permission(2)
+    # @user_ns.marshal_list_with(get_user_fields,envelope='data')
+    def get(self):
+        print ('xxxxxxxxxxxxxxxxx',request.data)
+        return {'dhaha':"342323"}

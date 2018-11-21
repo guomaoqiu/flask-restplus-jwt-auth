@@ -22,6 +22,10 @@ export default {
     const { username } = JSON.parse(config.body)
     return userMap[username]
   },
+  loginByEmail: config => {
+    const { email } = JSON.parse(config.body)
+    return userMap[email]
+  },
   getUserInfo: config => {
     const { token } = param2Obj(config.url)
     if (userMap[token]) {
