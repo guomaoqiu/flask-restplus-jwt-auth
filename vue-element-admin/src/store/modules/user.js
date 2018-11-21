@@ -52,7 +52,8 @@ const user = {
       const email = userInfo.email.trim()
       return new Promise((resolve, reject) => {
         loginByEmail(email, userInfo.password).then(response => {
-          const data = response.data.data
+          console.log(response)
+          const data = response.data
           commit('SET_TOKEN', data.access_token)
           commit('SET_EMAIL', email)
           setToken(data.access_token)
@@ -69,20 +70,21 @@ const user = {
       return new Promise((resolve, reject) => {
         getUserInfo().then(response => {
           console.log(response)
-          if (response.data) { // 由于mockjs 不支持自定义状态码只能这样hack
-            reject('error')
-          }
+          // if (!response.data) { // 由于mockjs 不支持自定义状态码只能这样hack
+          //   reject('error')
+          // }
           const data = response.data
 
-          if (data.roles && data.roles.length > 0) { // 验证返回的roles是否是一个非空数组
-            commit('SET_ROLES', data.roles)
-          } else {
-            reject('getInfo: roles must be a non-null array !')
-          }
-
-          commit('SET_NAME', data.name)
-          commit('SET_AVATAR', data.avatar)
-          commit('SET_INTRODUCTION', data.introduction)
+          // if (data.roles && data.roles.length > 0) { // 验证返回的roles是否是一个非空数组
+          //   commit('SET_ROLES', data.roles)
+          // } else {
+          //   reject('getInfo: roles must be a non-null array !')
+          // }
+          let roles = ['adimn']
+          commit('SET_ROLES', roles)
+          commit('SET_NAME', 'adimin')
+          // commit('SET_AVATAR', data.avatar)
+          // commit('SET_INTRODUCTION', data.introduction)
           resolve(response)
         }).catch(error => {
           reject(error)

@@ -2,8 +2,8 @@
 # @Author: guomaoqiu
 # @File Name: auth_utils.py
 # @Date:   2018-08-23 22:47:18
-# @Last Modified by:   Green
-# @Last Modified time: 2018-10-15 16:32:23
+# @Last Modified by:   guomaoqiu
+# @Last Modified time: 2018-11-21 17:57:19
 from app import db
 from flask import request
 
@@ -84,15 +84,24 @@ class Auth:
             db.session.commit()
 
             # raise error(status_code=200, return_code=1,message="fdsa")
-            raise notice(status_code=200, return_code=30000, action_status=True,playbook={
+            # raise notice(status_code=200, return_code=30000, action_status=True,playbook={
+            #         'user_id': user.id,
+            #         'is_active': user.is_active,
+            #         'username': user.username,
+            #         'user_role': user.user_role,
+            #         'access_token': access_token,
+            #         'refresh_token': refresh_token
+            #     })
+            return {
+                    'status':200,
+                    'message':"success",
                     'user_id': user.id,
                     'is_active': user.is_active,
                     'username': user.username,
                     'user_role': user.user_role,
                     'access_token': access_token,
                     'refresh_token': refresh_token
-                })
-
+                }
         else:
             # Return invalid password
             raise notice(status_code=421,return_code=20003,action_status=False)
