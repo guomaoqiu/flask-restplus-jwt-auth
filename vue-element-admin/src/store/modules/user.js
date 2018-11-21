@@ -55,6 +55,7 @@ const user = {
           console.log(response)
           const data = response.data
           commit('SET_TOKEN', data.access_token)
+          commit('SET_ROLES', data.roles)
           commit('SET_EMAIL', email)
           setToken(data.access_token)
           resolve()
@@ -73,8 +74,8 @@ const user = {
           //   reject('error')
           // }
           const data = response.data
-          console.log(data.roles)
-          if (data.roles && data.roles.length > 0) { // 验证返回的roles是否是一个非空数组
+          console.log(state.token)
+          if (state.roles) { // 验证返回的roles是否是一个非空数组
             commit('SET_ROLES', data.roles)
           } else {
             reject('getInfo: roles must be a non-null array !')
