@@ -24,18 +24,19 @@ export function loginByEmail(email, password) {
   })
 }
 
-export function logout() {
+export function logout(token) {
   return request({
     url: '/auth/logout',
-    method: 'post'
+    method: 'post',
+    params: { token }
   })
 }
 
-export function getUserInfo() {
+export function getUserInfo(token) {
   return request({
     url: '/user/info',
-    method: 'get'
-    // params: { token }
+    method: 'get',
+    params: { token }
   })
 }
 

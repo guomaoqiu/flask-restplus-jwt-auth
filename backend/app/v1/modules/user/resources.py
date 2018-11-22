@@ -71,7 +71,10 @@ class GetUserInfo(Resource):
     # @auth.login_required
     # @role_required.permission(2)
     # @user_ns.marshal_list_with(get_user_fields,envelope='data')
+    @user_ns.param('token', required=True)
     def get(self):
+        user_token = request.args.get('token')
+        print (user_token)
         return {
                 "roles": ['admin'],
                 # "token": access_token,

@@ -93,11 +93,11 @@ class Auth:
             #         'refresh_token': refresh_token
             #     })
             return {
-                "roles": ['admin'],
-                "token": access_token,
-                "introduction": '我是超级管理员',
+                "roles": [user.user_role],
+                "access_token": access_token,
+                "refresh_token": refresh_token,
                 "avatar": 'https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif',
-                "name": 'Super Admin'
+                "name": user.username
             }
             # return {
             #         'status':200,

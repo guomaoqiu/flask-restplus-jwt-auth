@@ -14,7 +14,7 @@
         </span>
         <el-input
           v-model="loginForm.email"
-          :placeholder="$t('login.email')"
+          :placeholder="$t('Email')"
           name="email"
           type="text"
           auto-complete="on"
@@ -73,14 +73,14 @@ export default {
   data() {
     const validateEmail = (rule, value, callback) => {
       if (!isvalidEmail(value)) {
-        callback(new Error('Please enter the correct user name'))
+        callback(new Error('邮箱地址有误，请重新输入.'))
       } else {
         callback()
       }
     }
     const validatePassword = (rule, value, callback) => {
       if (value.length < 6) {
-        callback(new Error('The password can not be less than 6 digits'))
+        callback(new Error('密码格式有误，请重新输入.'))
       } else {
         callback()
       }
@@ -91,7 +91,7 @@ export default {
         password: '123.com'
       },
       loginRules: {
-        username: [{ required: true, trigger: 'blur', validator: validateEmail }],
+        email: [{ required: true, trigger: 'blur', validator: validateEmail }],
         password: [{ required: true, trigger: 'blur', validator: validatePassword }]
       },
       passwordType: 'password',
@@ -134,7 +134,6 @@ export default {
             this.loading = false
           })
         } else {
-          console.log('error submit!!')
           return false
         }
       })
