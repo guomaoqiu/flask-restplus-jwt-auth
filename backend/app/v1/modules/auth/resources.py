@@ -2,8 +2,8 @@
 # @Author: guomaoqiu
 # @File Name: resources.py
 # @Date:   2018-08-19 00:08:26
-# @Last Modified by:   Green
-# @Last Modified time: 2018-10-15 16:37:37
+# @Last Modified by:   guomaoqiu
+# @Last Modified time: 2018-11-22 11:00:10
 
 ###### import module
 import logging
@@ -56,7 +56,7 @@ class LoginRequired(Resource):
 class Logout(Resource):
     """登出接口"""
     @auth_ns.doc('用户登出',parser=parser,body=logout_model)
-    @auth.login_required
+    # @auth.login_required
     def post(self):
         post_data = request.json
         return Auth.logout(data=post_data)

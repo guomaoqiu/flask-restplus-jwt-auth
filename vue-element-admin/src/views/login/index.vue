@@ -129,7 +129,6 @@ export default {
           this.loading = true
           this.$store.dispatch('LoginByEmail', this.loginForm).then(() => {
             this.loading = false
-            // console.log("success")
             this.$router.push({ path: this.redirect || '/' })
           }).catch(() => {
             this.loading = false
@@ -223,7 +222,7 @@ $light_gray:#eee;
     position: absolute;
     left: 0;
     right: 0;
-    width: 520px;
+    width: 500px;
     max-width: 100%;
     padding: 35px 35px 15px 35px;
     margin: 120px auto;
