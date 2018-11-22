@@ -54,14 +54,11 @@ const user = {
         loginByEmail(email, userInfo.password).then(response => {
           console.log(response)
           const data = response.data
-          commit('SET_TOKEN', data.access_token)
-          commit('SET_ROLES', data.roles)
-          commit('SET_EMAIL', email)
-          setToken(data.access_token)
+          commit('SET_TOKEN', data.token)
+          setToken(response.data.token)
           resolve()
         }).catch(error => {
           reject(error)
-          // alert('error')
         })
       })
     },
@@ -70,12 +67,12 @@ const user = {
     GetUserInfo({ commit, state }) {
       return new Promise((resolve, reject) => {
         getUserInfo().then(response => {
+          console.log(response)
           // if (!response.data) { // 由于mockjs 不支持自定义状态码只能这样hack
           //   reject('error')
           // }
           const data = response.data
-          console.log(state.token)
-          if (state.roles) { // 验证返回的roles是否是一个非空数组
+          if (data.roles && data.roles.length > 0) { // 验证返回的roles是否是一个非空数组
             commit('SET_ROLES', data.roles)
           } else {
             reject('getInfo: roles must be a non-null array !')
@@ -90,7 +87,6 @@ const user = {
         })
       })
     },
-
     // 第三方验证登录
     // LoginByThirdparty({ commit, state }, code) {
     //   return new Promise((resolve, reject) => {

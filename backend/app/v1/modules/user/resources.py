@@ -3,7 +3,7 @@
 # @File Name: resources.py
 # @Date:   2018-08-18 17:00:27
 # @Last Modified by:   guomaoqiu
-# @Last Modified time: 2018-11-21 15:42:15
+# @Last Modified time: 2018-11-22 10:37:48
 from flask import request
 from flask_restplus import Resource, Namespace
 
@@ -72,5 +72,10 @@ class GetUserInfo(Resource):
     # @role_required.permission(2)
     # @user_ns.marshal_list_with(get_user_fields,envelope='data')
     def get(self):
-        print ('xxxxxxxxxxxxxxxxx',request.data)
-        return {'dhaha':"342323"}
+        return {
+                "roles": ['admin'],
+                # "token": access_token,
+                "introduction": '我是超级管理员',
+                "avatar": 'https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif',
+                "name": 'Super Admin'
+            }
