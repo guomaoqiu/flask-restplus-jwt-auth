@@ -2,8 +2,8 @@
 # @Author: guomaoqiu
 # @File Name: role_required.py
 # @Date:   2018-08-22 20:27:06
-# @Last Modified by:   Green
-# @Last Modified time: 2018-10-10 11:39:56
+# @Last Modified by:   guomaoqiu
+# @Last Modified time: 2019-09-24 11:06:59
 
 import logging
 import functools
@@ -34,7 +34,7 @@ def permission(arg):
                     elif data['admin'] == 1:
                         print ("Your role is admin .")
                     else:
-                        print ("Your role is user {}.".format(data['admin']))
+                        print ("Your role is user .")
 
                     # Determine permissions based on permission_level
                     if data['admin'] < arg:

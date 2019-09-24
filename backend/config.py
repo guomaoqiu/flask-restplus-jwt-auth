@@ -33,7 +33,7 @@ class DevelopmentConfig(Config):
     DEBUG = True
     db_host = 'localhost'
     db_user = 'root'
-    db_pass = '123.com'
+    db_pass = 'guo.150019'
     db_name = 'restapi'
     SQLALCHEMY_DATABASE_URI = 'mysql+pymysql://' + db_user + ':' + db_pass + '@' + db_host + '/' + db_name
     SQLALCHEMY_ECHO=False

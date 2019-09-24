@@ -2,8 +2,8 @@
 # @Author: guomaoqiu
 # @File Name: __init__.py
 # @Date:   2018-08-19 00:08:41
-# @Last Modified by:   guomaoqiu@sina.com
-# @Last Modified time: 2018-08-24 00:02:18
+# @Last Modified by:   guomaoqiu
+# @Last Modified time: 2019-09-24 09:47:29
 from flask import Blueprint
 from flask_restplus import Api
 
@@ -25,13 +25,13 @@ v1_api = Api(v1_blueprint,
             title='DevOps FlaskREST API',
             version='1.0',
             description='auth: guomaoqiu\n'
-                        'since: 2018-08-01',
+                        'since: 2019-08-01',
             contact="Author",
             contact_email="2399447849@qq.com",
             default="auth", 
             default_label=''
-            # authorizations=authorizations,
-            # security='apiKey')
+            #authorizations='authorizations',
+            #security='apiKey'
             )
 
 # 导入两个红图

@@ -27,8 +27,8 @@ export function loginByEmail(email, password) {
 export function logout(token) {
   return request({
     url: '/auth/logout',
-    method: 'post',
-    params: { token }
+    method: 'post'
+    // data
   })
 }
 

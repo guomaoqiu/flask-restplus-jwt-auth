@@ -3,7 +3,7 @@
 # @File Name: auth_utils.py
 # @Date:   2018-08-23 22:47:18
 # @Last Modified by:   guomaoqiu
-# @Last Modified time: 2018-11-21 23:49:05
+# @Last Modified time: 2019-09-24 11:03:46
 from app import db
 from flask import request
 
@@ -93,8 +93,9 @@ class Auth:
             #         'refresh_token': refresh_token
             #     })
             return {
+                "message": "login success",
                 "roles": [user.user_role],
-                "access_token": access_token,
+                "access_token": "Bearer %s" % (access_token),
                 "refresh_token": refresh_token,
                 "avatar": 'https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif',
                 "name": user.username
