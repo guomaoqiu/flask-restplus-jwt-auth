@@ -32,7 +32,7 @@ json-spec==0.10.1
 jsonpointer==1.14
 jsonschema==2.6.0
 livereload==2.5.2
-Mako==1.0.7
+Mako==1.2.2
 MarkupSafe==0.23
 marshmallow==3.0.0b12
 passlib==1.7.1
