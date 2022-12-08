@@ -3,7 +3,7 @@ aniso8601==1.1.0
 asn1crypto==0.24.0
 backports-abc==0.5
 blinker==1.4
-certifi==2018.8.13
+certifi==2022.12.7
 cffi==1.11.5
 chardet==3.0.4
 click==6.6
